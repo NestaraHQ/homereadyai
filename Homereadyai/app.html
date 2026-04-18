@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeReady AI — Your Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ir init Br Zr Ci jr $r Lr capture calculateEventProperties Yr register register_once register_for_session unregister unregister_for_session Jr getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Kr identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset setIdentity clearIdentity get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Wr zr createPersonProfile setInternalOrTestUser Xr Or en opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing Vr debug ki Gr getPageViewId captureTraceFeedback captureTraceMetric Nr".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_oN88DJdMqarFNdBsPSADzsaHGNNyDV3nrcvczS2xXq7N', {
+        api_host: 'https://us.i.posthog.com',
+        defaults: '2026-01-30',
+        person_profiles: 'identified_only',
+    })
+</script>
+<style>
+:root{--orange:#E8793C;--orange-dark:#C4622A;--orange-light:#FDF0E8;--bg:#F7F4EF;--white:#FFFFFF;--dark:#1C1812;--mid:#6B5C4E;--muted:#A89888;--border:rgba(108,92,78,0.14);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+header{background:var(--dark);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{width:32px;height:32px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:18px;height:18px;}
+.logo-name{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#fff;}
+.logo-by{font-size:11px;color:rgba(255,255,255,0.35);margin-left:3px;}
+.powered{font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:0.05em;text-transform:uppercase;}
+.hero-strip{background:var(--orange);padding:1rem 2rem;text-align:center;}
+.hero-strip h1{font-family:'Fraunces',serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:600;color:#fff;margin-bottom:0.25rem;}
+.hero-strip p{font-size:13px;color:rgba(255,255,255,0.85);font-weight:300;}
+.tabs{display:flex;background:var(--dark);padding:0 1.5rem;overflow-x:auto;}
+.tab-btn{flex:1;min-width:120px;padding:12px 16px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,0.45);cursor:pointer;border-bottom:2.5px solid transparent;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;}
+.tab-btn:hover{color:rgba(255,255,255,0.75);}
+.tab-btn.active{color:#fff;border-bottom-color:var(--orange);}
+.main{max-width:700px;margin:0 auto;padding:1.5rem 1.25rem 3rem;}
+.tool-panel{display:none;}
+.tool-panel.active{display:block;}
+.welcome-banner{background:var(--dark);border-radius:14px;padding:1.1rem 1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.welcome-text h2{font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:#fff;margin-bottom:3px;}
+.welcome-text p{font-size:13px;color:rgba(255,255,255,0.45);}
+.welcome-badge{background:var(--orange);color:#fff;font-size:11px;font-weight:600;padding:4px 12px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
+.card{background:var(--white);border-radius:14px;border:1px solid var(--border);overflow:hidden;}
+.card-head{padding:1.25rem 1.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.card-icon{width:38px;height:38px;background:var(--orange-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.card-title{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--dark);}
+.card-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.card-body{padding:1.25rem 1.5rem 1.5rem;}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.row.full{grid-template-columns:1fr;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;}
+input,select,textarea{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);background:var(--bg);outline:none;transition:border-color 0.15s;}
+input:focus,select:focus,textarea:focus{border-color:var(--orange);background:#fff;}
+textarea{min-height:96px;resize:vertical;line-height:1.6;}
+.btn{width:100%;padding:13px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn:hover{background:var(--orange-dark);}
+.btn:disabled{opacity:0.55;cursor:not-allowed;}
+.result{margin-top:1.25rem;display:none;}
+.result.show{display:block;}
+.result-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.result-label{font-size:11px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.07em;}
+.copy-btn{font-size:12px;padding:3px 11px;border:1px solid var(--border);border-radius:99px;background:#fff;color:var(--mid);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.copy-btn:hover{border-color:var(--orange);color:var(--orange);}
+.result-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;font-size:14px;line-height:1.8;color:var(--dark);white-space:pre-wrap;}
+.disclaimer{margin-top:10px;padding:10px 12px;background:var(--orange-light);border-radius:8px;font-size:12px;color:var(--orange-dark);line-height:1.6;}
+.state-badge{display:inline-flex;align-items:center;gap:5px;background:var(--orange-light);color:var(--orange-dark);font-size:11px;font-weight:600;padding:4px 10px;border-radius:99px;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.05em;}
+.spin{width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:sp .65s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+footer{background:var(--dark);text-align:center;padding:1.25rem;font-size:11px;color:rgba(255,255,255,0.3);}
+footer a{color:var(--orange);text-decoration:none;}
+@media(max-width:580px){.row{grid-template-columns:1fr;}.main{padding:1.25rem 1rem 3rem;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <span class="logo-name">HomeReady AI</span>
+    <span class="logo-by">by Nestara</span>
+  </div>
+  <span class="powered">Member access</span>
+</header>
+
+<div class="hero-strip">
+  <h1>Your real estate toolkit</h1>
+  <p>Write listings, decode contracts, and send perfect emails — tuned to your state's laws.</p>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('listing',this)"><span>🏠</span> Listing writer</button>
+  <button class="tab-btn" onclick="switchTab('contract',this)"><span>📄</span> Contract explainer</button>
+  <button class="tab-btn" onclick="switchTab('email',this)"><span>✉️</span> Outreach email</button>
+</div>
+
+<div class="main">
+
+  <div class="welcome-banner">
+    <div class="welcome-text">
+      <h2>Welcome to HomeReady AI</h2>
+      <p>All three tools are ready. Pick one above to get started.</p>
+    </div>
+    <span class="welcome-badge">Member</span>
+  </div>
+
+  <div id="tab-listing" class="tool-panel active">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon">🏠</div>
+        <div><div class="card-title">Listing writer</div><div class="card-sub">Generate professional property descriptions in seconds</div></div>
+      </div>
+      <div class="card-body">
+        <div class="row full" style="margin-bottom:12px"><div class="fg"><label>Property address</label><input type="text" id="l-address" placeholder="e.g. 123 Oak Street, Austin TX"></div></div>
+        <div class="row">
+          <div class="fg"><label>Bedrooms</label><select id="l-beds"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6+</option></select></div>
+          <div class="fg"><label>Bathrooms</label><select id="l-baths"><option>1</option><option>1.5</option><option selected>2</option><option>2.5</option><option>3</option><option>3+</option></select></div>
+          <div class="fg"><label>Square footage</label><input type="text" id="l-sqft" placeholder="e.g. 1,850 sq ft"></div>
+          <div class="fg"><label>Tone</label><select id="l-tone"><option value="warm and inviting">Warm & inviting</option><option value="luxury and upscale">Luxury</option><option value="modern and minimalist">Modern</option><option value="family-friendly">Family-friendly</option></select></div>
+        </div>
+        <div class="row full"><div class="fg"><label>Top features (comma separated)</label><input type="text" id="l-features" placeholder="e.g. renovated kitchen, pool, new roof, hardwood floors"></div></div>
+        <button class="btn" onclick="runListing()" id="l-btn">Generate listing</button>
+        <div class="result" id="l-result"><div class="result-bar"><span class="result-label">Your listing</span><button class="copy-btn" onclick="copyText('l-content',this)">Copy</button></div><div class="result-box" id="l-content"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-contract" class="tool-panel">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon">📄</div>
+        <div><div class="card-title">Contract explainer</div><div class="card-sub">Plain-English analysis tuned to your state's laws</div></div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="fg"><label>Your state</label>
+            <select id="c-state" onchange="updateBadge()">
+              <option value="">— select state —</option>
+              <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
+            </select>
+          </div>
+          <div class="fg"><label>I am a</label><select id="c-role"><option value="home buyer">Home buyer</option><option value="home seller">Home seller</option><option value="first-time buyer">First-time buyer</option><option value="real estate investor">Investor</option><option value="real estate agent">Agent</option></select></div>
+        </div>
+        <div id="badge-wrap" style="display:none;margin-bottom:10px;"><div class="state-badge" id="badge-text"></div></div>
+        <div class="row full" style="margin-bottom:12px"><div class="fg"><label>Paste contract clause</label><textarea id="c-text" placeholder="Paste any clause, paragraph, or section from your purchase agreement, lease, or disclosure form here..."></textarea></div></div>
+        <div class="row full" style="margin-bottom:4px"><div class="fg"><label>What do you want to know?</label><select id="c-focus"><option value="plain English summary">Plain English summary</option><option value="risks and red flags for my state">Risks & red flags</option><option value="whether this is standard or unusual in my state">Standard or unusual?</option><option value="what I should negotiate">What to negotiate</option><option value="my legal rights under this clause in my state">My legal rights</option></select></div></div>
+        <button class="btn" onclick="runContract()" id="c-btn">Analyze with state law</button>
+        <div class="result" id="c-result"><div class="result-bar"><span class="result-label">Analysis</span><button class="copy-btn" onclick="copyText('c-content',this)">Copy</button></div><div class="result-box" id="c-content"></div><div class="disclaimer">Not legal advice — always consult a licensed real estate attorney in your state for final decisions.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-email" class="tool-panel">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon">✉️</div>
+        <div><div class="card-title">Outreach email</div><div class="card-sub">Draft perfect offers, follow-ups, and requests</div></div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="fg"><label>Email purpose</label><select id="e-type"><option value="make an offer on a home">Make an offer</option><option value="follow up after a showing">Follow up after showing</option><option value="request repairs after inspection">Request repairs</option><option value="counter a seller's counteroffer">Counter an offer</option><option value="ask a real estate agent for more information">Ask agent for info</option><option value="withdraw an offer professionally">Withdraw an offer</option></select></div>
+          <div class="fg"><label>Tone</label><select id="e-tone"><option value="professional and confident">Professional</option><option value="friendly and personable">Friendly</option><option value="firm and assertive">Firm</option><option value="warm and appreciative">Warm</option></select></div>
+        </div>
+        <div class="row full" style="margin-bottom:4px"><div class="fg"><label>Key details</label><textarea id="e-details" placeholder="e.g. Property: 123 Oak St, Austin TX. Offering $320,000. Asking seller to cover $5,000 in closing costs. My name is Jordan..."></textarea></div></div>
+        <button class="btn" onclick="runEmail()" id="e-btn">Write email</button>
+        <div class="result" id="e-result"><div class="result-bar"><span class="result-label">Your email</span><button class="copy-btn" onclick="copyText('e-content',this)">Copy</button></div><div class="result-box" id="e-content"></div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>HomeReady AI · <a href="#">Nestara</a> · Not legal advice · <a href="mailto:nestara@nestarahq.com">nestara@nestarahq.com</a></footer>
+
+<script>
+const stateProfiles={California:"California has the strictest disclosure laws in the US, including Natural Hazard Disclosure requirements for earthquakes, floods, and wildfires.",Texas:"Texas requires a Seller's Disclosure Notice. Flood zone disclosure is required in flood-prone areas.",Florida:"Florida requires disclosure of all known material defects. Sinkhole history and flood zone status are key disclosures.",NewYork:"New York sellers must provide a Disclosure Statement or give the buyer a $500 credit.",Massachusetts:"Massachusetts does not require a standard disclosure form, but sellers must disclose lead paint and septic systems.",Illinois:"Illinois has the Residential Disclosure Act. Radon and lead paint disclosure are mandatory.",Washington:"Washington requires a detailed Seller Disclosure Statement.",Colorado:"Colorado requires a Seller's Property Disclosure form.",Utah:"Utah operates under caveat emptor — sellers can legally withhold information they aren't directly asked about.",Arizona:"Arizona requires a detailed SPDS form and CLUE report.",Georgia:"Georgia has limited disclosure requirements. Buyers must conduct thorough due diligence.",default:"This analysis applies general US real estate contract law principles."};
+function switchTab(n,b){document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tool-panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('tab-'+n).classList.add('active');if(window.posthog)posthog.capture('tab_switched',{tab:n});}
+function updateBadge(){const s=document.getElementById('c-state').value;const w=document.getElementById('badge-wrap');const b=document.getElementById('badge-text');if(s){w.style.display='block';b.innerHTML='📍 '+s+' law applies';}else{w.style.display='none';}}
+function setBtn(id,loading){const b=document.getElementById(id);const l={'l-btn':'Generate listing','c-btn':'Analyze with state law','e-btn':'Write email'};b.disabled=loading;b.innerHTML=loading?'<div class="spin"></div> Working...':l[id];}
+function showResult(a,c,t){document.getElementById(a).classList.add('show');document.getElementById(c).textContent=t;}
+function copyText(id,btn){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',2000);});}
+async function callClaude(p){const r=await fetch("/.netlify/functions/claude",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:[{role:"user",content:p}]})});const d=await r.json();return d.content?.[0]?.text||"Something went wrong.";}
+async function runListing(){const a=document.getElementById('l-address').value||'a lovely home';const be=document.getElementById('l-beds').value;const ba=document.getElementById('l-baths').value;const s=document.getElementById('l-sqft').value||'spacious';const f=document.getElementById('l-features').value||'great features';const t=document.getElementById('l-tone').value;setBtn('l-btn',true);if(window.posthog)posthog.capture('listing_generated');const r=await callClaude(`Write a compelling real estate listing. Tone: ${t}. 3-4 sentences, vivid, buyer-focused. No clichés.\n\nProperty: ${a} | Beds: ${be} | Baths: ${ba} | Size: ${s}\nFeatures: ${f}\n\nWrite only the listing.`);showResult('l-result','l-content',r);setBtn('l-btn',false);}
+async function runContract(){const s=document.getElementById('c-state').value;const ro=document.getElementById('c-role').value;const t=document.getElementById('c-text').value.trim();const f=document.getElementById('c-focus').value;if(!t){alert('Please paste some contract text first.');return;}const ctx=s?`User is in ${s}. ${stateProfiles[s]||stateProfiles['default']}`:stateProfiles['default'];setBtn('c-btn',true);if(window.posthog)posthog.capture('contract_analyzed',{state:s});const r=await callClaude(`You are a real estate assistant helping a ${ro}. Provide a ${f}.\n\n${ctx}\n\nUse plain language. 3-5 short paragraphs. End with "Bottom line:" summary. Note this is educational not legal advice.\n\nContract text: "${t}"`);showResult('c-result','c-content',r);setBtn('c-btn',false);}
+async function runEmail(){const t=document.getElementById('e-type').value;const to=document.getElementById('e-tone').value;const d=document.getElementById('e-details').value||'a property I am interested in';setBtn('e-btn',true);if(window.posthog)posthog.capture('email_generated',{type:t});const r=await callClaude(`Write a ${to} real estate email to ${t}. Details: ${d}. Under 200 words. Include "Subject: ..." line. Write only the email.`);showResult('e-result','e-content',r);setBtn('e-btn',false);}
+</script>
+</body>
+</html>
