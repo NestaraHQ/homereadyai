@@ -160,13 +160,13 @@ footer a{color:var(--orange);text-decoration:none;}
       </div>
       <div class="card-body">
         <div class="row">
-          <div class="fg"><label>Your state</label>
-            <select id="c-state" onchange="updateBadge()">
-              <option value="">— select state —</option>
-              <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
-            </select>
-          </div>
           <div class="fg"><label>I am a</label><select id="c-role"><option value="home buyer">Home buyer</option><option value="home seller">Home seller</option><option value="first-time buyer">First-time buyer</option><option value="real estate investor">Investor</option><option value="real estate agent">Agent</option></select></div>
+        </div>
+        <div class="row full" style="margin-bottom:12px"><div class="fg"><label>Property street address (optional)</label><input type="text" id="c-address" placeholder="e.g. 123 Oak Street"></div></div>
+        <div class="row three" style="margin-bottom:12px">
+          <div class="fg"><label>City</label><input type="text" id="c-city" placeholder="e.g. Austin"></div>
+          <div class="fg"><label>State</label><select id="c-state" onchange="updateBadge()"><option value="">— state —</option><option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option selected>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option></select></div>
+          <div class="fg"><label>Zip code</label><input type="text" id="c-zip" placeholder="e.g. 78701" maxlength="5"></div>
         </div>
         <div id="badge-wrap" style="display:none;margin-bottom:10px;"><div class="state-badge" id="badge-text"></div></div>
         <div class="row full" style="margin-bottom:12px"><div class="fg"><label>Paste contract clause</label><textarea id="c-text" placeholder="Paste any clause, paragraph, or section from your purchase agreement, lease, or disclosure form here..."></textarea></div></div>
@@ -339,11 +339,16 @@ async function runListing(){
 
 async function runContract(){
   const s=document.getElementById('c-state').value;
+  const cstreet=document.getElementById('c-address').value;
+  const ccity=document.getElementById('c-city').value;
+  const czip=document.getElementById('c-zip').value;
+  const cprop=[cstreet,ccity,s,czip].filter(Boolean).join(', ');
   const ro=document.getElementById('c-role').value;
   const t=document.getElementById('c-text').value.trim();
   const f=document.getElementById('c-focus').value;
   if(!t){alert('Please paste some contract text first.');return;}
   const ctx=s?`User is in ${s}. ${stateProfiles[s]||stateProfiles['default']}`:stateProfiles['default'];
+  const propCtx=cprop?`Property address: ${cprop}. `:''';
   setBtn('c-btn',true);
   if(window.posthog)posthog.capture('contract_analyzed',{state:s});
   const r=await callClaude(`You are a real estate assistant helping a ${ro}. Provide a ${f}.\n\n${ctx}\n\nUse plain language. 3-5 short paragraphs. End with "Bottom line:" summary. Note this is educational not legal advice.\n\nContract text: "${t}"`);
