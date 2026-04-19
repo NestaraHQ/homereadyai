@@ -428,243 +428,59 @@ Write ONLY the letter text, ready to copy and send. Do not include any explanati
 function downloadPDF(){
   const content=document.getElementById('p-content').textContent;
   if(!content||content==='Something went wrong.')return;
-
   const company=document.getElementById('p-lo-company').value||'Mortgage Company';
   const loName=document.getElementById('p-lo-name').value||'Loan Officer';
   const loPhone=document.getElementById('p-lo-phone').value||'';
   const loEmail=document.getElementById('p-lo-email').value||'';
   const loNmls=document.getElementById('p-lo-nmls').value||'';
   const state=document.getElementById('p-state').value||'Texas';
-
   const printWindow=window.open('','_blank');
-  printWindow.document.write(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Pre-Approval Letter — ${company}</title>
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
-      <style>
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{
-          font-family:'Source Sans 3',Georgia,serif;
-          background:#fff;
-          color:#1a1a1a;
-          font-size:14px;
-          line-height:1.8;
-        }
-        .page{
-          max-width:720px;
-          margin:0 auto;
-          padding:0;
-          min-height:100vh;
-          border-left:1px solid #e0d8cc;
-          border-right:1px solid #e0d8cc;
-          position:relative;
-        }
-
-        /* Top border bar */
-        .top-bar{
-          height:6px;
-          background:linear-gradient(90deg,#1C1812 0%,#4a3728 50%,#1C1812 100%);
-        }
-
-        /* Gold accent line */
-        .gold-line{
-          height:2px;
-          background:linear-gradient(90deg,transparent 0%,#C9A227 20%,#C9A227 80%,transparent 100%);
-          margin:0 40px;
-        }
-
-        /* Letterhead */
-        .letterhead{
-          padding:32px 48px 24px;
-          display:flex;
-          align-items:center;
-          justify-content:space-between;
-          border-bottom:1px solid #e8e0d4;
-          position:relative;
-        }
-
-        .company-block{
-          flex:1;
-        }
-
-        .company-name{
-          font-family:'Playfair Display',serif;
-          font-size:26px;
-          font-weight:700;
-          color:#1C1812;
-          letter-spacing:0.02em;
-          line-height:1.2;
-          margin-bottom:4px;
-        }
-
-        .company-tagline{
-          font-size:11px;
-          color:#8a7a6a;
-          letter-spacing:0.12em;
-          text-transform:uppercase;
-          font-weight:600;
-        }
-
-        .contact-block{
-          text-align:right;
-          font-size:11px;
-          color:#6b5c4e;
-          line-height:1.9;
-        }
-
-        .contact-block .lo-name-header{
-          font-weight:600;
-          color:#1C1812;
-          font-size:12px;
-          margin-bottom:2px;
-        }
-
-        /* Corner ornaments */
-        .ornament{
-          position:absolute;
-          width:28px;
-          height:28px;
-          opacity:0.25;
-        }
-        .ornament-tl{ top:16px; left:16px; border-top:2px solid #C9A227; border-left:2px solid #C9A227; }
-        .ornament-tr{ top:16px; right:16px; border-top:2px solid #C9A227; border-right:2px solid #C9A227; }
-
-        /* Gold divider */
-        .header-divider{
-          margin:0 48px;
-          height:1px;
-          background:linear-gradient(90deg,transparent,#C9A227 30%,#C9A227 70%,transparent);
-          opacity:0.5;
-        }
-
-        /* Body */
-        .letter-body{
-          padding:32px 48px 40px;
-          position:relative;
-        }
-
-        /* Side border ornaments */
-        .letter-body::before{
-          content:'';
-          position:absolute;
-          left:24px;
-          top:32px;
-          bottom:40px;
-          width:1px;
-          background:linear-gradient(180deg,transparent,#e8d5a3 20%,#e8d5a3 80%,transparent);
-          opacity:0.6;
-        }
-        .letter-body::after{
-          content:'';
-          position:absolute;
-          right:24px;
-          top:32px;
-          bottom:40px;
-          width:1px;
-          background:linear-gradient(180deg,transparent,#e8d5a3 20%,#e8d5a3 80%,transparent);
-          opacity:0.6;
-        }
-
-        .letter-content{
-          white-space:pre-wrap;
-          font-size:13.5px;
-          line-height:1.85;
-          color:#2a2a2a;
-        }
-
-        /* Footer */
-        .letter-footer{
-          margin:0 48px;
-          padding:16px 0;
-          border-top:1px solid #e8e0d4;
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          font-size:10px;
-          color:#a89888;
-        }
-
-        .footer-nmls{
-          font-weight:600;
-          color:#8a7a6a;
-        }
-
-        .bottom-bar{
-          height:6px;
-          background:linear-gradient(90deg,#1C1812 0%,#4a3728 50%,#1C1812 100%);
-        }
-
-        @media print{
-          body{margin:0;}
-          .page{border:none;max-width:100%;}
-        }
-      </style>
-    </head>
-    <body>
-      <div class="page">
-        <div class="top-bar"></div>
-        <div class="gold-line" style="margin-top:4px;"></div>
-
-        <div class="letterhead">
-          <div class="ornament ornament-tl"></div>
-          <div class="ornament ornament-tr"></div>
-          <div class="company-block">
-            <div class="company-name">${company}</div>
-            <div class="company-tagline">Mortgage Lending · ${state} Licensed</div>
-          </div>
-          <div class="contact-block">
-            <div class="lo-name-header">${loName}</div>
-            ${loPhone ? `<div>${loPhone}</div>` : ''}
-            ${loEmail ? `<div>${loEmail}</div>` : ''}
-            ${loNmls ? `<div>NMLS# ${loNmls}</div>` : ''}
-          </div>
-        </div>
-
-        <div class="header-divider"></div>
-
-        <div class="letter-body">
-          <div class="letter-content">${content}</div>
-        </div>
-
-        <div class="letter-footer">
-          <div>HomeReady AI · Powered by Nestara</div>
-          <div class="footer-nmls">${loNmls ? 'NMLS# ' + loNmls : ''} · This letter is not a commitment to lend.</div>
-        </div>
-
-        <div class="gold-line" style="margin-bottom:4px;"></div>
-        <div class="bottom-bar"></div>
+  printWindow.document.write(`<!DOCTYPE html><html><head><title>Pre-Approval Letter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Source Sans 3',Georgia,serif;background:#fff;color:#1a1a1a;font-size:14px;line-height:1.8;}
+    .page{max-width:720px;margin:0 auto;border-left:1px solid #e0d8cc;border-right:1px solid #e0d8cc;}
+    .top-bar{height:6px;background:linear-gradient(90deg,#1C1812,#4a3728,#1C1812);}
+    .gold-line{height:2px;background:linear-gradient(90deg,transparent,#C9A227 20%,#C9A227 80%,transparent);margin:4px 40px;}
+    .letterhead{padding:32px 48px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e8e0d4;position:relative;}
+    .ornament{position:absolute;width:28px;height:28px;opacity:0.25;}
+    .ornament-tl{top:16px;left:16px;border-top:2px solid #C9A227;border-left:2px solid #C9A227;}
+    .ornament-tr{top:16px;right:16px;border-top:2px solid #C9A227;border-right:2px solid #C9A227;}
+    .company-name{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#1C1812;}
+    .company-tagline{font-size:11px;color:#8a7a6a;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;}
+    .contact-block{text-align:right;font-size:11px;color:#6b5c4e;line-height:1.9;}
+    .lo-name-header{font-weight:600;color:#1C1812;font-size:12px;}
+    .header-divider{margin:0 48px;height:1px;background:linear-gradient(90deg,transparent,#C9A227 30%,#C9A227 70%,transparent);opacity:0.5;}
+    .letter-body{padding:32px 48px 40px;}
+    .letter-content{white-space:pre-wrap;font-size:13.5px;line-height:1.85;color:#2a2a2a;}
+    .letter-footer{margin:0 48px;padding:16px 0;border-top:1px solid #e8e0d4;display:flex;justify-content:space-between;font-size:10px;color:#a89888;}
+    .bottom-bar{height:6px;background:linear-gradient(90deg,#1C1812,#4a3728,#1C1812);}
+    @media print{.page{border:none;max-width:100%;}}
+  </style></head>
+  <body><div class="page">
+    <div class="top-bar"></div>
+    <div class="gold-line"></div>
+    <div class="letterhead">
+      <div class="ornament ornament-tl"></div>
+      <div class="ornament ornament-tr"></div>
+      <div><div class="company-name">${company}</div><div class="company-tagline">Mortgage Lending · ${state} Licensed</div></div>
+      <div class="contact-block">
+        <div class="lo-name-header">${loName}</div>
+        ${loPhone?'<div>'+loPhone+'</div>':''}
+        ${loEmail?'<div>'+loEmail+'</div>':''}
+        ${loNmls?'<div>NMLS# '+loNmls+'</div>':''}
       </div>
-      <script>window.onload=function(){window.print();}<\/script>
-    
-<script>
-const _supabase = window.supabase.createClient('https://wegjxjvoobdixwfhhsaj.supabase.co', 'sb_publishable_Q7hbvRvd7-ogbttBSR3B0A_qxd2iqY7');
-
-// Check auth on load — redirect to login if not signed in
-(async function() {
-  const { data } = await _supabase.auth.getSession();
-  if (!data.session) {
-    window.location.href = '/login.html';
-    return;
-  }
-  // Show user name if available
-  const user = data.session.user;
-  const name = user.user_metadata?.full_name || user.email;
-  const badge = document.querySelector('.welcome-badge');
-  if (badge) badge.textContent = 'Member';
-  const welcomeP = document.querySelector('.welcome-text p');
-  if (welcomeP) welcomeP.textContent = 'All four tools are ready. Pick one above to get started.';
-})();
-
-// Sign out function
-function signOut() {
-  _supabase.auth.signOut().then(() => window.location.href = '/login.html');
-}
-</script>
-</body>
-    </html>
-  `);
+    </div>
+    <div class="header-divider"></div>
+    <div class="letter-body"><div class="letter-content">${content}</div></div>
+    <div class="letter-footer">
+      <div>HomeReady AI · Powered by Nestara</div>
+      <div>${loNmls?'NMLS# '+loNmls+' · ':''} Not a commitment to lend.</div>
+    </div>
+    <div class="gold-line"></div>
+    <div class="bottom-bar"></div>
+  </div><script>window.onload=function(){window.print();}<\/script></body></html>\`);
   printWindow.document.close();
 }
 // Set default expiry to 30 days from today
