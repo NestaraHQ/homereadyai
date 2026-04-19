@@ -31,6 +31,8 @@ header{background:var(--dark);padding:0 2rem;display:flex;align-items:center;jus
 .tab-btn{flex:1;min-width:120px;padding:12px 16px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,0.45);cursor:pointer;border-bottom:2.5px solid transparent;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;}
 .tab-btn:hover{color:rgba(255,255,255,0.75);}
 .tab-btn.active{color:#fff;border-bottom-color:var(--orange);}
+.tab-btn.lo-tab{color:rgba(255,200,100,0.6);}
+.tab-btn.lo-tab.active{color:#FFD580;border-bottom-color:#FFD580;}
 .main{max-width:700px;margin:0 auto;padding:1.5rem 1.25rem 3rem;}
 .tool-panel{display:none;}
 .tool-panel.active{display:block;}
@@ -38,14 +40,17 @@ header{background:var(--dark);padding:0 2rem;display:flex;align-items:center;jus
 .welcome-text h2{font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:#fff;margin-bottom:3px;}
 .welcome-text p{font-size:13px;color:rgba(255,255,255,0.45);}
 .welcome-badge{background:var(--orange);color:#fff;font-size:11px;font-weight:600;padding:4px 12px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
+.lo-badge{background:#FFD580;color:#7A5800;font-size:11px;font-weight:600;padding:4px 12px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
 .card{background:var(--white);border-radius:14px;border:1px solid var(--border);overflow:hidden;}
 .card-head{padding:1.25rem 1.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
 .card-icon{width:38px;height:38px;background:var(--orange-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.card-icon.lo{background:#FFF8E7;}
 .card-title{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--dark);}
 .card-sub{font-size:12px;color:var(--muted);margin-top:2px;}
 .card-body{padding:1.25rem 1.5rem 1.5rem;}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
 .row.full{grid-template-columns:1fr;}
+.row.three{grid-template-columns:1fr 1fr 1fr;}
 .fg{display:flex;flex-direction:column;gap:5px;}
 label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;}
 input,select,textarea{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);background:var(--bg);outline:none;transition:border-color 0.15s;}
@@ -54,20 +59,31 @@ textarea{min-height:96px;resize:vertical;line-height:1.6;}
 .btn{width:100%;padding:13px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;}
 .btn:hover{background:var(--orange-dark);}
 .btn:disabled{opacity:0.55;cursor:not-allowed;}
+.btn-lo{background:#C9A227;}
+.btn-lo:hover{background:#A87E1A;}
+.btn-pdf{width:100%;padding:11px;background:transparent;color:var(--orange);border:1.5px solid var(--orange);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-pdf:hover{background:var(--orange-light);}
 .result{margin-top:1.25rem;display:none;}
 .result.show{display:block;}
 .result-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
 .result-label{font-size:11px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.07em;}
+.result-label.lo{color:#C9A227;}
 .copy-btn{font-size:12px;padding:3px 11px;border:1px solid var(--border);border-radius:99px;background:#fff;color:var(--mid);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
 .copy-btn:hover{border-color:var(--orange);color:var(--orange);}
 .result-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;font-size:14px;line-height:1.8;color:var(--dark);white-space:pre-wrap;}
 .disclaimer{margin-top:10px;padding:10px 12px;background:var(--orange-light);border-radius:8px;font-size:12px;color:var(--orange-dark);line-height:1.6;}
+.disclaimer.lo{background:#FFF8E7;color:#7A5800;}
 .state-badge{display:inline-flex;align-items:center;gap:5px;background:var(--orange-light);color:var(--orange-dark);font-size:11px;font-weight:600;padding:4px 10px;border-radius:99px;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.05em;}
+.lo-banner{background:linear-gradient(135deg,#1C1812 0%,#2E2416 100%);border-radius:14px;padding:1.1rem 1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(255,213,128,0.2);}
+.lo-banner-text h2{font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:#FFD580;margin-bottom:3px;}
+.lo-banner-text p{font-size:13px;color:rgba(255,255,255,0.45);}
+.divider{height:1px;background:var(--border);margin:16px 0;}
+.section-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;}
 .spin{width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:sp .65s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg);}}
 footer{background:var(--dark);text-align:center;padding:1.25rem;font-size:11px;color:rgba(255,255,255,0.3);}
 footer a{color:var(--orange);text-decoration:none;}
-@media(max-width:580px){.row{grid-template-columns:1fr;}.main{padding:1.25rem 1rem 3rem;}}
+@media(max-width:580px){.row,.row.three{grid-template-columns:1fr;}.main{padding:1.25rem 1rem 3rem;}}
 </style>
 </head>
 <body>
@@ -95,6 +111,7 @@ footer a{color:var(--orange);text-decoration:none;}
   <button class="tab-btn active" onclick="switchTab('listing',this)"><span>🏠</span> Listing writer</button>
   <button class="tab-btn" onclick="switchTab('contract',this)"><span>📄</span> Contract explainer</button>
   <button class="tab-btn" onclick="switchTab('email',this)"><span>✉️</span> Outreach email</button>
+  <button class="tab-btn lo-tab" onclick="switchTab('preapproval',this)"><span>🏦</span> Pre-approval</button>
 </div>
 
 <div class="main">
@@ -102,11 +119,12 @@ footer a{color:var(--orange);text-decoration:none;}
   <div class="welcome-banner">
     <div class="welcome-text">
       <h2>Welcome to HomeReady AI</h2>
-      <p>All three tools are ready. Pick one above to get started.</p>
+      <p>All four tools are ready. Pick one above to get started.</p>
     </div>
     <span class="welcome-badge">Member</span>
   </div>
 
+  <!-- LISTING WRITER -->
   <div id="tab-listing" class="tool-panel active">
     <div class="card">
       <div class="card-head">
@@ -128,6 +146,7 @@ footer a{color:var(--orange);text-decoration:none;}
     </div>
   </div>
 
+  <!-- CONTRACT EXPLAINER -->
   <div id="tab-contract" class="tool-panel">
     <div class="card">
       <div class="card-head">
@@ -153,6 +172,7 @@ footer a{color:var(--orange);text-decoration:none;}
     </div>
   </div>
 
+  <!-- OUTREACH EMAIL -->
   <div id="tab-email" class="tool-panel">
     <div class="card">
       <div class="card-head">
@@ -171,21 +191,252 @@ footer a{color:var(--orange);text-decoration:none;}
     </div>
   </div>
 
+  <!-- PRE-APPROVAL LETTER GENERATOR -->
+  <div id="tab-preapproval" class="tool-panel">
+
+    <div class="lo-banner">
+      <div class="lo-banner-text">
+        <h2>🏦 Pre-Approval Letter Generator</h2>
+        <p>Generate a professional pre-approval letter instantly — ready to send to buyers and their realtors.</p>
+      </div>
+      <span class="lo-badge">LO Tool</span>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon lo">🏦</div>
+        <div><div class="card-title">Pre-approval letter</div><div class="card-sub">Professional letter generated in seconds, tuned to your state</div></div>
+      </div>
+      <div class="card-body">
+
+        <div class="section-label">Loan officer info</div>
+        <div class="row three">
+          <div class="fg"><label>LO Name</label><input type="text" id="p-lo-name" placeholder="e.g. James Chacon"></div>
+          <div class="fg"><label>Company / Bank</label><input type="text" id="p-lo-company" placeholder="e.g. First National Bank"></div>
+          <div class="fg"><label>NMLS #</label><input type="text" id="p-lo-nmls" placeholder="e.g. 1234567"></div>
+        </div>
+        <div class="row">
+          <div class="fg"><label>LO Phone</label><input type="text" id="p-lo-phone" placeholder="e.g. (956) 555-0100"></div>
+          <div class="fg"><label>LO Email</label><input type="text" id="p-lo-email" placeholder="e.g. james@firstnational.com"></div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">Borrower info</div>
+        <div class="row">
+          <div class="fg"><label>Borrower Name</label><input type="text" id="p-borrower" placeholder="e.g. Maria & Carlos Reyes"></div>
+          <div class="fg"><label>State</label>
+            <select id="p-state">
+              <option value="">— select state —</option>
+              <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option selected>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">Loan details</div>
+        <div class="row three">
+          <div class="fg"><label>Pre-approved Amount</label><input type="text" id="p-amount" placeholder="e.g. $385,000"></div>
+          <div class="fg"><label>Loan Type</label>
+            <select id="p-loan-type">
+              <option value="Conventional">Conventional</option>
+              <option value="FHA">FHA</option>
+              <option value="VA">VA</option>
+              <option value="USDA">USDA</option>
+              <option value="Jumbo">Jumbo</option>
+            </select>
+          </div>
+          <div class="fg"><label>Down Payment</label><input type="text" id="p-down" placeholder="e.g. 10% / $38,500"></div>
+        </div>
+        <div class="row">
+          <div class="fg"><label>Credit Score Range</label>
+            <select id="p-credit">
+              <option value="excellent (760+)">Excellent (760+)</option>
+              <option value="very good (720–759)">Very good (720–759)</option>
+              <option value="good (680–719)" selected>Good (680–719)</option>
+              <option value="fair (640–679)">Fair (640–679)</option>
+            </select>
+          </div>
+          <div class="fg"><label>Letter Valid Until</label><input type="date" id="p-expiry"></div>
+        </div>
+        <div class="row full">
+          <div class="fg"><label>Property address (optional)</label><input type="text" id="p-property" placeholder="e.g. 456 Elm St, Laredo TX 78041 — leave blank for open letter"></div>
+        </div>
+        <div class="row full">
+          <div class="fg"><label>Additional notes (optional)</label><textarea id="p-notes" style="min-height:60px;" placeholder="e.g. Subject to satisfactory appraisal. Borrower is self-employed with 2 years verified income."></textarea></div>
+        </div>
+
+        <button class="btn btn-lo" onclick="runPreapproval()" id="p-btn">Generate pre-approval letter</button>
+
+        <div class="result" id="p-result">
+          <div class="result-bar">
+            <span class="result-label lo">Pre-approval letter</span>
+            <button class="copy-btn" onclick="copyText('p-content',this)">Copy</button>
+          </div>
+          <div class="result-box" id="p-content"></div>
+          <button class="btn-pdf" onclick="downloadPDF()" id="p-pdf-btn">⬇ Download as PDF</button>
+          <div class="disclaimer lo">This letter is generated for communication purposes. Final loan approval is subject to underwriting review, verification of income, assets, and credit, and satisfactory appraisal. Not a commitment to lend.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <footer>HomeReady AI · <a href="#">Nestara</a> · Not legal advice · <a href="mailto:nestara@nestarahq.com">nestara@nestarahq.com</a></footer>
 
 <script>
 const stateProfiles={California:"California has the strictest disclosure laws in the US, including Natural Hazard Disclosure requirements for earthquakes, floods, and wildfires.",Texas:"Texas requires a Seller's Disclosure Notice. Flood zone disclosure is required in flood-prone areas.",Florida:"Florida requires disclosure of all known material defects. Sinkhole history and flood zone status are key disclosures.",NewYork:"New York sellers must provide a Disclosure Statement or give the buyer a $500 credit.",Massachusetts:"Massachusetts does not require a standard disclosure form, but sellers must disclose lead paint and septic systems.",Illinois:"Illinois has the Residential Disclosure Act. Radon and lead paint disclosure are mandatory.",Washington:"Washington requires a detailed Seller Disclosure Statement.",Colorado:"Colorado requires a Seller's Property Disclosure form.",Utah:"Utah operates under caveat emptor — sellers can legally withhold information they aren't directly asked about.",Arizona:"Arizona requires a detailed SPDS form and CLUE report.",Georgia:"Georgia has limited disclosure requirements. Buyers must conduct thorough due diligence.",default:"This analysis applies general US real estate contract law principles."};
-function switchTab(n,b){document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tool-panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('tab-'+n).classList.add('active');if(window.posthog)posthog.capture('tab_switched',{tab:n});}
+
+function switchTab(n,b){
+  document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tool-panel').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  document.getElementById('tab-'+n).classList.add('active');
+  if(window.posthog)posthog.capture('tab_switched',{tab:n});
+}
+
 function updateBadge(){const s=document.getElementById('c-state').value;const w=document.getElementById('badge-wrap');const b=document.getElementById('badge-text');if(s){w.style.display='block';b.innerHTML='📍 '+s+' law applies';}else{w.style.display='none';}}
-function setBtn(id,loading){const b=document.getElementById(id);const l={'l-btn':'Generate listing','c-btn':'Analyze with state law','e-btn':'Write email'};b.disabled=loading;b.innerHTML=loading?'<div class="spin"></div> Working...':l[id];}
+
+function setBtn(id,loading){
+  const b=document.getElementById(id);
+  const l={'l-btn':'Generate listing','c-btn':'Analyze with state law','e-btn':'Write email','p-btn':'Generate pre-approval letter'};
+  b.disabled=loading;
+  b.innerHTML=loading?'<div class="spin"></div> Working...':l[id];
+}
+
 function showResult(a,c,t){document.getElementById(a).classList.add('show');document.getElementById(c).textContent=t;}
 function copyText(id,btn){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',2000);});}
 async function callClaude(p){const r=await fetch("/.netlify/functions/claude",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:[{role:"user",content:p}]})});const d=await r.json();return d.content?.[0]?.text||"Something went wrong.";}
-async function runListing(){const a=document.getElementById('l-address').value||'a lovely home';const be=document.getElementById('l-beds').value;const ba=document.getElementById('l-baths').value;const s=document.getElementById('l-sqft').value||'spacious';const f=document.getElementById('l-features').value||'great features';const t=document.getElementById('l-tone').value;setBtn('l-btn',true);if(window.posthog)posthog.capture('listing_generated');const r=await callClaude(`Write a compelling real estate listing. Tone: ${t}. 3-4 sentences, vivid, buyer-focused. No clichés.\n\nProperty: ${a} | Beds: ${be} | Baths: ${ba} | Size: ${s}\nFeatures: ${f}\n\nWrite only the listing.`);showResult('l-result','l-content',r);setBtn('l-btn',false);}
-async function runContract(){const s=document.getElementById('c-state').value;const ro=document.getElementById('c-role').value;const t=document.getElementById('c-text').value.trim();const f=document.getElementById('c-focus').value;if(!t){alert('Please paste some contract text first.');return;}const ctx=s?`User is in ${s}. ${stateProfiles[s]||stateProfiles['default']}`:stateProfiles['default'];setBtn('c-btn',true);if(window.posthog)posthog.capture('contract_analyzed',{state:s});const r=await callClaude(`You are a real estate assistant helping a ${ro}. Provide a ${f}.\n\n${ctx}\n\nUse plain language. 3-5 short paragraphs. End with "Bottom line:" summary. Note this is educational not legal advice.\n\nContract text: "${t}"`);showResult('c-result','c-content',r);setBtn('c-btn',false);}
-async function runEmail(){const t=document.getElementById('e-type').value;const to=document.getElementById('e-tone').value;const d=document.getElementById('e-details').value||'a property I am interested in';setBtn('e-btn',true);if(window.posthog)posthog.capture('email_generated',{type:t});const r=await callClaude(`Write a ${to} real estate email to ${t}. Details: ${d}. Under 200 words. Include "Subject: ..." line. Write only the email.`);showResult('e-result','e-content',r);setBtn('e-btn',false);}
+
+async function runListing(){
+  const a=document.getElementById('l-address').value||'a lovely home';
+  const be=document.getElementById('l-beds').value;
+  const ba=document.getElementById('l-baths').value;
+  const s=document.getElementById('l-sqft').value||'spacious';
+  const f=document.getElementById('l-features').value||'great features';
+  const t=document.getElementById('l-tone').value;
+  setBtn('l-btn',true);
+  if(window.posthog)posthog.capture('listing_generated');
+  const r=await callClaude(`Write a compelling real estate listing. Tone: ${t}. 3-4 sentences, vivid, buyer-focused. No clichés.\n\nProperty: ${a} | Beds: ${be} | Baths: ${ba} | Size: ${s}\nFeatures: ${f}\n\nWrite only the listing.`);
+  showResult('l-result','l-content',r);
+  setBtn('l-btn',false);
+}
+
+async function runContract(){
+  const s=document.getElementById('c-state').value;
+  const ro=document.getElementById('c-role').value;
+  const t=document.getElementById('c-text').value.trim();
+  const f=document.getElementById('c-focus').value;
+  if(!t){alert('Please paste some contract text first.');return;}
+  const ctx=s?`User is in ${s}. ${stateProfiles[s]||stateProfiles['default']}`:stateProfiles['default'];
+  setBtn('c-btn',true);
+  if(window.posthog)posthog.capture('contract_analyzed',{state:s});
+  const r=await callClaude(`You are a real estate assistant helping a ${ro}. Provide a ${f}.\n\n${ctx}\n\nUse plain language. 3-5 short paragraphs. End with "Bottom line:" summary. Note this is educational not legal advice.\n\nContract text: "${t}"`);
+  showResult('c-result','c-content',r);
+  setBtn('c-btn',false);
+}
+
+async function runEmail(){
+  const t=document.getElementById('e-type').value;
+  const to=document.getElementById('e-tone').value;
+  const d=document.getElementById('e-details').value||'a property I am interested in';
+  setBtn('e-btn',true);
+  if(window.posthog)posthog.capture('email_generated',{type:t});
+  const r=await callClaude(`Write a ${to} real estate email to ${t}. Details: ${d}. Under 200 words. Include "Subject: ..." line. Write only the email.`);
+  showResult('e-result','e-content',r);
+  setBtn('e-btn',false);
+}
+
+async function runPreapproval(){
+  const loName=document.getElementById('p-lo-name').value||'Loan Officer';
+  const loCompany=document.getElementById('p-lo-company').value||'Lending Company';
+  const loNmls=document.getElementById('p-lo-nmls').value||'N/A';
+  const loPhone=document.getElementById('p-lo-phone').value||'';
+  const loEmail=document.getElementById('p-lo-email').value||'';
+  const borrower=document.getElementById('p-borrower').value||'the applicant';
+  const state=document.getElementById('p-state').value||'Texas';
+  const amount=document.getElementById('p-amount').value||'[amount]';
+  const loanType=document.getElementById('p-loan-type').value;
+  const down=document.getElementById('p-down').value||'standard down payment';
+  const credit=document.getElementById('p-credit').value;
+  const expiry=document.getElementById('p-expiry').value;
+  const property=document.getElementById('p-property').value;
+  const notes=document.getElementById('p-notes').value;
+
+  const expiryStr=expiry?new Date(expiry).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}):'30 days from issuance';
+  const propertyStr=property?`for the property located at ${property}`:'for a property to be determined';
+  const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  setBtn('p-btn',true);
+  if(window.posthog)posthog.capture('preapproval_generated',{state,loanType});
+
+  const prompt=`Generate a professional mortgage pre-approval letter with the following details. Format it as a formal business letter, ready to print and send. Use professional but clear language appropriate for ${state}.
+
+Loan Officer: ${loName}
+Company: ${loCompany}
+NMLS#: ${loNmls}
+Phone: ${loPhone}
+Email: ${loEmail}
+
+Borrower(s): ${borrower}
+Pre-approved amount: ${amount}
+Loan type: ${loanType}
+Down payment: ${down}
+Credit profile: ${credit}
+Property: ${propertyStr}
+Letter date: ${today}
+Valid until: ${expiryStr}
+State: ${state}
+Additional notes: ${notes||'None'}
+
+Write a complete, professional pre-approval letter. Include:
+1. Formal header with date and loan officer contact info
+2. Opening paragraph confirming pre-approval
+3. Loan details paragraph (amount, loan type, down payment)
+4. Validity and conditions paragraph
+5. Closing with LO signature block
+6. Standard disclaimer that this is not a commitment to lend
+
+Write ONLY the letter text, ready to copy and send. Do not include any explanation outside the letter.`;
+
+  const r=await callClaude(prompt);
+  showResult('p-result','p-content',r);
+  setBtn('p-btn',false);
+}
+
+function downloadPDF(){
+  const content=document.getElementById('p-content').textContent;
+  if(!content||content==='Something went wrong.')return;
+
+  const printWindow=window.open('','_blank');
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Pre-Approval Letter</title>
+      <style>
+        body{font-family:Georgia,serif;max-width:680px;margin:60px auto;padding:0 40px;color:#1a1a1a;line-height:1.8;font-size:15px;}
+        pre{white-space:pre-wrap;font-family:Georgia,serif;font-size:15px;line-height:1.8;}
+        @media print{body{margin:0;padding:40px;}}
+      </style>
+    </head>
+    <body>
+      <pre>${content}</pre>
+      <script>window.onload=function(){window.print();}<\/script>
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+}
+
+// Set default expiry to 30 days from today
+(function(){
+  const d=new Date();
+  d.setDate(d.getDate()+30);
+  const str=d.toISOString().split('T')[0];
+  document.getElementById('p-expiry').value=str;
+})();
 </script>
 </body>
 </html>
