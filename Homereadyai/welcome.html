@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeReady AI — Welcome!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#E8793C;--orange-dark:#C4622A;--bg:#F7F4EF;--dark:#1C1812;--border:rgba(108,92,78,0.14);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
+header{background:var(--dark);padding:0 2rem;display:flex;align-items:center;height:58px;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-icon{width:32px;height:32px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:18px;height:18px;}
+.logo-name{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#fff;}
+.logo-by{font-size:11px;color:rgba(255,255,255,0.35);margin-left:3px;}
+.wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;}
+.card{background:#fff;border-radius:16px;border:1px solid var(--border);padding:2.5rem;width:100%;max-width:480px;text-align:center;}
+.check{font-size:56px;margin-bottom:1rem;}
+.card h1{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:var(--dark);margin-bottom:8px;}
+.card p{font-size:15px;color:#6B5C4E;margin-bottom:1.75rem;line-height:1.6;}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.75rem;text-align:left;}
+.tool{background:var(--bg);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--dark);display:flex;align-items:center;gap:8px;}
+.tool span{font-size:18px;}
+.btn{display:inline-block;padding:14px 32px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.2s;text-decoration:none;}
+.btn:hover{background:var(--orange-dark);}
+.sub{margin-top:1rem;font-size:12px;color:#A89888;}
+.sub a{color:var(--orange);text-decoration:none;}
+footer{background:var(--dark);text-align:center;padding:1rem;font-size:11px;color:rgba(255,255,255,0.3);}
+footer a{color:var(--orange);text-decoration:none;}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="/">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <span class="logo-name">HomeReady AI</span>
+    <span class="logo-by">by Nestara</span>
+  </a>
+</header>
+<div class="wrap">
+  <div class="card">
+    <div class="check">🎉</div>
+    <h1>You're in!</h1>
+    <p>Your payment was successful. Welcome to HomeReady AI — your real estate toolkit is ready to use.</p>
+    <div class="tools">
+      <div class="tool"><span>🏠</span> Listing writer</div>
+      <div class="tool"><span>📄</span> Contract explainer</div>
+      <div class="tool"><span>✉️</span> Outreach email</div>
+      <div class="tool"><span>🏦</span> Pre-approval</div>
+    </div>
+    <a href="/signup.html" class="btn">Create your account →</a>
+    <div class="sub">Already have an account? <a href="/login.html">Sign in</a></div>
+  </div>
+</div>
+<footer>HomeReady AI · <a href="#">Nestara</a> · Not legal advice · <a href="mailto:nestara@nestarahq.com">nestara@nestarahq.com</a></footer>
+</body>
+</html>
