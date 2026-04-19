@@ -491,12 +491,13 @@ function downloadPDF(){
   document.getElementById('p-expiry').value=str;
 })();
 </script>
-<script>
+<!-- AUTH CHECK TEMPORARILY DISABLED FOR DEMO - re-enable after Tuesday -->
+<!-- <script>
 (async function() {
   const _sb = window.supabase.createClient('https://wegjxjvoobdixwfhhsaj.supabase.co', 'sb_publishable_Q7hbvRvd7-ogbttBSR3B0A_qxd2iqY7');
   const { data } = await _sb.auth.getSession();
   if (!data.session) window.location.href = '/login.html';
 })();
-</script>
+</script> -->
 </body>
 </html>
