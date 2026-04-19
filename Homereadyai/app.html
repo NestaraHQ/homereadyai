@@ -132,7 +132,12 @@ footer a{color:var(--orange);text-decoration:none;}
         <div><div class="card-title">Listing writer</div><div class="card-sub">Generate professional property descriptions in seconds</div></div>
       </div>
       <div class="card-body">
-        <div class="row full" style="margin-bottom:12px"><div class="fg"><label>Property address</label><input type="text" id="l-address" placeholder="e.g. 123 Oak Street, Austin TX"></div></div>
+        <div class="row full" style="margin-bottom:12px"><div class="fg"><label>Street address</label><input type="text" id="l-address" placeholder="e.g. 123 Oak Street"></div></div>
+        <div class="row three" style="margin-bottom:12px">
+          <div class="fg"><label>City</label><input type="text" id="l-city" placeholder="e.g. Austin"></div>
+          <div class="fg"><label>State</label><select id="l-addrstate"><option value="">— state —</option><option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option selected>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option></select></div>
+          <div class="fg"><label>Zip code</label><input type="text" id="l-zip" placeholder="e.g. 78701" maxlength="5"></div>
+        </div>
         <div class="row">
           <div class="fg"><label>Bedrooms</label><select id="l-beds"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6+</option></select></div>
           <div class="fg"><label>Bathrooms</label><select id="l-baths"><option>1</option><option>1.5</option><option selected>2</option><option>2.5</option><option>3</option><option>3+</option></select></div>
@@ -183,6 +188,12 @@ footer a{color:var(--orange);text-decoration:none;}
         <div class="row">
           <div class="fg"><label>Email purpose</label><select id="e-type"><option value="make an offer on a home">Make an offer</option><option value="follow up after a showing">Follow up after showing</option><option value="request repairs after inspection">Request repairs</option><option value="counter a seller's counteroffer">Counter an offer</option><option value="ask a real estate agent for more information">Ask agent for info</option><option value="withdraw an offer professionally">Withdraw an offer</option></select></div>
           <div class="fg"><label>Tone</label><select id="e-tone"><option value="professional and confident">Professional</option><option value="friendly and personable">Friendly</option><option value="firm and assertive">Firm</option><option value="warm and appreciative">Warm</option></select></div>
+        </div>
+        <div class="row full" style="margin-bottom:12px"><div class="fg"><label>Property street address</label><input type="text" id="e-address" placeholder="e.g. 123 Oak Street"></div></div>
+        <div class="row three" style="margin-bottom:12px">
+          <div class="fg"><label>City</label><input type="text" id="e-city" placeholder="e.g. Austin"></div>
+          <div class="fg"><label>State</label><select id="e-addrstate"><option value="">— state —</option><option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option selected>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option></select></div>
+          <div class="fg"><label>Zip code</label><input type="text" id="e-zip" placeholder="e.g. 78701" maxlength="5"></div>
         </div>
         <div class="row full" style="margin-bottom:4px"><div class="fg"><label>Key details</label><textarea id="e-details" placeholder="e.g. Property: 123 Oak St, Austin TX. Offering $320,000. Asking seller to cover $5,000 in closing costs. My name is Jordan..."></textarea></div></div>
         <button class="btn" onclick="runEmail()" id="e-btn">Write email</button>
@@ -258,8 +269,11 @@ footer a{color:var(--orange);text-decoration:none;}
           </div>
           <div class="fg"><label>Letter Valid Until</label><input type="date" id="p-expiry"></div>
         </div>
-        <div class="row full">
-          <div class="fg"><label>Property address (optional)</label><input type="text" id="p-property" placeholder="e.g. 456 Elm St, Laredo TX 78041 — leave blank for open letter"></div>
+        <div class="row full" style="margin-bottom:12px"><div class="fg"><label>Property street address (optional — leave blank for open letter)</label><input type="text" id="p-address" placeholder="e.g. 123 Oak Street"></div></div>
+        <div class="row three" style="margin-bottom:12px">
+          <div class="fg"><label>City</label><input type="text" id="p-city" placeholder="e.g. Austin"></div>
+          <div class="fg"><label>State</label><select id="p-addrstate"><option value="">— state —</option><option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option selected>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option></select></div>
+          <div class="fg"><label>Zip code</label><input type="text" id="p-zip" placeholder="e.g. 78701" maxlength="5"></div>
         </div>
         <div class="row full">
           <div class="fg"><label>Additional notes (optional)</label><textarea id="p-notes" style="min-height:60px;" placeholder="e.g. Subject to satisfactory appraisal. Borrower is self-employed with 2 years verified income."></textarea></div>
@@ -310,7 +324,7 @@ function copyText(id,btn){navigator.clipboard.writeText(document.getElementById(
 async function callClaude(p){const r=await fetch("/.netlify/functions/claude",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:[{role:"user",content:p}]})});const d=await r.json();return d.content?.[0]?.text||"Something went wrong.";}
 
 async function runListing(){
-  const a=document.getElementById('l-address').value||'a lovely home';
+  const street=document.getElementById('l-address').value||'';const city=document.getElementById('l-city').value||'';const lstate=document.getElementById('l-addrstate').value||'';const zip=document.getElementById('l-zip').value||'';const a=[street,city,lstate,zip].filter(Boolean).join(', ')||'a lovely home';
   const be=document.getElementById('l-beds').value;
   const ba=document.getElementById('l-baths').value;
   const s=document.getElementById('l-sqft').value||'spacious';
@@ -340,7 +354,7 @@ async function runContract(){
 async function runEmail(){
   const t=document.getElementById('e-type').value;
   const to=document.getElementById('e-tone').value;
-  const d=document.getElementById('e-details').value||'a property I am interested in';
+  const estreet=document.getElementById('e-address').value;const ecity=document.getElementById('e-city').value;const estate=document.getElementById('e-addrstate').value;const ezip=document.getElementById('e-zip').value;const eprop=[estreet,ecity,estate,ezip].filter(Boolean).join(', ');const edetails=document.getElementById('e-details').value;const d=(eprop?'Property: '+eprop+'. ':'')+(edetails||'a property I am interested in');
   setBtn('e-btn',true);
   if(window.posthog)posthog.capture('email_generated',{type:t});
   const r=await callClaude(`Write a ${to} real estate email to ${t}. Details: ${d}. Under 200 words. Include "Subject: ..." line. Write only the email.`);
@@ -361,7 +375,7 @@ async function runPreapproval(){
   const down=document.getElementById('p-down').value||'standard down payment';
   const credit=document.getElementById('p-credit').value;
   const expiry=document.getElementById('p-expiry').value;
-  const property=document.getElementById('p-property').value;
+  const pstreet=document.getElementById('p-address').value;const pcity=document.getElementById('p-city').value;const pstate2=document.getElementById('p-addrstate').value;const pzip=document.getElementById('p-zip').value;const property=[pstreet,pcity,pstate2,pzip].filter(Boolean).join(', ');
   const notes=document.getElementById('p-notes').value;
 
   const expiryStr=expiry?new Date(expiry).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}):'30 days from issuance';
