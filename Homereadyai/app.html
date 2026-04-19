@@ -667,7 +667,6 @@ function signOut() {
   `);
   printWindow.document.close();
 }
-
 // Set default expiry to 30 days from today
 (function(){
   const d=new Date();
@@ -676,30 +675,12 @@ function signOut() {
   document.getElementById('p-expiry').value=str;
 })();
 </script>
-
 <script>
-const _supabase = window.supabase.createClient('https://wegjxjvoobdixwfhhsaj.supabase.co', 'sb_publishable_Q7hbvRvd7-ogbttBSR3B0A_qxd2iqY7');
-
-// Check auth on load — redirect to login if not signed in
 (async function() {
-  const { data } = await _supabase.auth.getSession();
-  if (!data.session) {
-    window.location.href = '/login.html';
-    return;
-  }
-  // Show user name if available
-  const user = data.session.user;
-  const name = user.user_metadata?.full_name || user.email;
-  const badge = document.querySelector('.welcome-badge');
-  if (badge) badge.textContent = 'Member';
-  const welcomeP = document.querySelector('.welcome-text p');
-  if (welcomeP) welcomeP.textContent = 'All four tools are ready. Pick one above to get started.';
+  const _sb = window.supabase.createClient('https://wegjxjvoobdixwfhhsaj.supabase.co', 'sb_publishable_Q7hbvRvd7-ogbttBSR3B0A_qxd2iqY7');
+  const { data } = await _sb.auth.getSession();
+  if (!data.session) window.location.href = '/login.html';
 })();
-
-// Sign out function
-function signOut() {
-  _supabase.auth.signOut().then(() => window.location.href = '/login.html');
-}
 </script>
 </body>
 </html>
