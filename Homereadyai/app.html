@@ -348,7 +348,7 @@ async function runContract(){
   const f=document.getElementById('c-focus').value;
   if(!t){alert('Please paste some contract text first.');return;}
   const ctx=s?`User is in ${s}. ${stateProfiles[s]||stateProfiles['default']}`:stateProfiles['default'];
-  const propCtx=cprop?`Property address: ${cprop}. `:''';
+  const propCtx=cprop?`Property address: ${cprop}. `:'';
   setBtn('c-btn',true);
   if(window.posthog)posthog.capture('contract_analyzed',{state:s});
   const r=await callClaude(`You are a real estate assistant helping a ${ro}. Provide a ${f}.\n\n${ctx}\n\nUse plain language. 3-5 short paragraphs. End with "Bottom line:" summary. Note this is educational not legal advice.\n\nContract text: "${t}"`);
