@@ -60,8 +60,8 @@ footer a{color:var(--orange);text-decoration:none;}
 </div>
 <footer>HomeReady AI · <a href="#">Nestara</a> · Not legal advice · <a href="mailto:nestara@nestarahq.com">nestara@nestarahq.com</a></footer>
 <script>
-const supabase = window.supabase.createClient('https://wegjxjvoobdixwfhhsaj.supabase.co', 'sb_publishable_Q7hbvRvd7-ogbttBSR3B0A_qxd2iqY7');
-supabase.auth.getSession().then(({data}) => { if (data.session) window.location.href = '/app'; });
+const _supabaseClient = window.supabase.createClient('https://wegjxjvoobdixwfhhsaj.supabase.co', 'sb_publishable_Q7hbvRvd7-ogbttBSR3B0A_qxd2iqY7');
+_supabaseClient.auth.getSession().then(({data}) => { if (data.session) window.location.href = '/app'; });
 async function handleLogin() {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
@@ -70,7 +70,7 @@ async function handleLogin() {
   err.style.display = 'none';
   if (!email || !password) { showError('Please enter your email and password.'); return; }
   btn.disabled = true; btn.textContent = 'Signing in...';
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { error } = await _supabaseClient.auth.signInWithPassword({ email, password });
   if (error) { showError(error.message); btn.disabled = false; btn.textContent = 'Sign in'; return; }
   window.location.href = '/app';
 }
