@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeReady AI — Comp Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#E8793C;--orange-dark:#C4622A;--orange-light:#FDF0E8;--bg:#F7F4EF;--white:#FFFFFF;--dark:#1C1812;--mid:#6B5C4E;--muted:#A89888;--border:rgba(108,92,78,0.14);--green:#1D9E75;--green-light:#E6F8F0;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+header{background:var(--dark);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-icon{width:32px;height:32px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:18px;height:18px;}
+.logo-name{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#fff;}
+.logo-by{font-size:11px;color:rgba(255,255,255,0.35);margin-left:3px;}
+.back-link{font-size:13px;color:rgba(255,255,255,0.45);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color 0.2s;}
+.back-link:hover{color:#fff;}
+.hero-strip{background:var(--orange);padding:1rem 2rem;text-align:center;}
+.hero-strip h1{font-family:'Fraunces',serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:600;color:#fff;margin-bottom:0.25rem;}
+.hero-strip p{font-size:13px;color:rgba(255,255,255,0.85);font-weight:300;}
+.wrap{max-width:900px;margin:0 auto;padding:1.5rem 1.25rem 4rem;}
+.card{background:var(--white);border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:1.25rem;}
+.card-head{padding:1.25rem 1.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.card-icon{width:38px;height:38px;background:var(--orange-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.card-title{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--dark);}
+.card-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.card-body{padding:1.25rem 1.5rem 1.5rem;}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.row.three{grid-template-columns:1fr 1fr 1fr;}
+.row.full{grid-template-columns:1fr;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;}
+input,select{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);background:var(--bg);outline:none;transition:border-color 0.15s;}
+input:focus,select:focus{border-color:var(--orange);background:#fff;}
+.range-wrap{display:flex;flex-direction:column;gap:8px;}
+.range-label-row{display:flex;justify-content:space-between;align-items:center;}
+.range-val{font-size:13px;font-weight:600;color:var(--orange);}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:var(--border);border:none;padding:0;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--orange);cursor:pointer;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+input[type=range]:focus{border-color:transparent;background:var(--border);}
+.beds-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;}
+.bed-btn{padding:8px 4px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--mid);cursor:pointer;transition:all 0.15s;text-align:center;}
+.bed-btn:hover{border-color:var(--orange);color:var(--orange);}
+.bed-btn.active{background:var(--orange);border-color:var(--orange);color:#fff;}
+.price-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;}
+.price-sep{font-size:13px;color:var(--muted);text-align:center;}
+.btn{width:100%;padding:13px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn:hover{background:var(--orange-dark);}
+.btn:disabled{opacity:0.55;cursor:not-allowed;}
+.spin{width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:sp .65s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.results{display:none;}
+.results.show{display:block;}
+.ai-summary{background:var(--dark);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;}
+.ai-label{font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;}
+.ai-text{font-size:15px;color:#fff;line-height:1.65;font-weight:300;}
+.ai-text strong{color:var(--orange);font-weight:600;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.25rem;}
+.stat{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;}
+.stat-val{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--dark);line-height:1;}
+.stat-label{font-size:11px;color:var(--muted);margin-top:4px;font-weight:500;}
+.comps-list{display:flex;flex-direction:column;gap:10px;}
+.comp-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;transition:all 0.15s;}
+.comp-card:hover{border-color:rgba(232,121,60,0.3);box-shadow:0 4px 12px rgba(28,24,18,0.06);}
+.comp-addr{font-size:14px;font-weight:600;color:var(--dark);margin-bottom:3px;}
+.comp-details{font-size:12px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;}
+.comp-detail{display:flex;align-items:center;gap:4px;}
+.comp-price{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--dark);text-align:right;white-space:nowrap;}
+.comp-ppsf{font-size:11px;color:var(--muted);text-align:right;margin-top:2px;}
+.comp-badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;margin-top:4px;}
+.badge-sold{background:#E6F8F0;color:var(--green);}
+.badge-active{background:var(--orange-light);color:var(--orange-dark);}
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.section-hdr-title{font-size:13px;font-weight:600;color:var(--mid);text-transform:uppercase;letter-spacing:0.06em;}
+.sort-select{font-size:12px;padding:5px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--mid);cursor:pointer;font-family:'DM Sans',sans-serif;}
+footer{background:var(--dark);text-align:center;padding:1.25rem;font-size:11px;color:rgba(255,255,255,0.3);}
+footer a{color:var(--orange);text-decoration:none;}
+@media(max-width:580px){.row,.row.three{grid-template-columns:1fr;}.beds-grid{grid-template-columns:repeat(3,1fr);}.stats-row{grid-template-columns:1fr 1fr;}.comp-card{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="/app">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <span class="logo-name">HomeReady AI</span>
+    <span class="logo-by">by Nestara</span>
+  </a>
+  <a href="/app" class="back-link">← Back to tools</a>
+</header>
+
+<div class="hero-strip">
+  <h1>Home price comparison</h1>
+  <p>Find comparable sales and estimate fair market value for any property</p>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon">🏘️</div>
+      <div><div class="card-title">Search comparable properties</div><div class="card-sub">Enter property details to find recent sales and active listings nearby</div></div>
+    </div>
+    <div class="card-body">
+
+      <div class="row full" style="margin-bottom:12px">
+        <div class="fg"><label>Subject property address</label><input type="text" id="s-address" placeholder="e.g. 123 Oak Street"></div>
+      </div>
+      <div class="row three" style="margin-bottom:16px">
+        <div class="fg"><label>City</label><input type="text" id="s-city" placeholder="e.g. Austin"></div>
+        <div class="fg"><label>State</label>
+          <select id="s-state">
+            <option value="">— state —</option>
+            <option selected>Texas</option><option>California</option><option>Florida</option><option>New York</option><option>Illinois</option><option>Washington</option><option>Tennessee</option><option>Utah</option><option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Vermont</option><option>Virginia</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
+          </select>
+        </div>
+        <div class="fg"><label>Zip code</label><input type="text" id="s-zip" placeholder="e.g. 78701" maxlength="5"></div>
+      </div>
+
+      <div class="row" style="margin-bottom:16px">
+        <div class="fg">
+          <div class="range-label-row"><label>Search radius</label><span class="range-val" id="radius-val">1.0 miles</span></div>
+          <div class="range-wrap">
+            <input type="range" id="radius" min="1" max="20" value="4" oninput="updateRadius(this.value)">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted)"><span>0.25 mi</span><span>5 mi</span></div>
+          </div>
+        </div>
+        <div class="fg">
+          <div class="range-label-row"><label>Square footage range</label><span class="range-val" id="sqft-val">1,000 – 3,000 sq ft</span></div>
+          <div class="range-wrap">
+            <input type="range" id="sqft-min" min="500" max="5000" step="100" value="1000" oninput="updateSqft()">
+            <input type="range" id="sqft-max" min="500" max="5000" step="100" value="3000" oninput="updateSqft()" style="margin-top:4px;">
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="fg">
+            <label>Bedrooms</label>
+            <div class="beds-grid" id="beds-grid">
+              <button class="bed-btn" onclick="selectBed(this,'beds')">Any</button>
+              <button class="bed-btn" onclick="selectBed(this,'beds')">1+</button>
+              <button class="bed-btn active" onclick="selectBed(this,'beds')">2+</button>
+              <button class="bed-btn" onclick="selectBed(this,'beds')">3+</button>
+              <button class="bed-btn" onclick="selectBed(this,'beds')">4+</button>
+              <button class="bed-btn" onclick="selectBed(this,'beds')">5+</button>
+            </div>
+          </div>
+          <div class="fg">
+            <label>Bathrooms</label>
+            <div class="beds-grid" id="baths-grid">
+              <button class="bed-btn" onclick="selectBed(this,'baths')">Any</button>
+              <button class="bed-btn" onclick="selectBed(this,'baths')">1+</button>
+              <button class="bed-btn active" onclick="selectBed(this,'baths')">2+</button>
+              <button class="bed-btn" onclick="selectBed(this,'baths')">3+</button>
+              <button class="bed-btn" onclick="selectBed(this,'baths')">4+</button>
+              <button class="bed-btn" onclick="selectBed(this,'baths')">5+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px">
+        <label style="display:block;margin-bottom:8px;">Price range</label>
+        <div class="price-row">
+          <div class="fg"><input type="text" id="price-min" placeholder="Min (e.g. $200,000)" oninput="formatPrice(this)"></div>
+          <div class="price-sep">to</div>
+          <div class="fg"><input type="text" id="price-max" placeholder="Max (e.g. $600,000)" oninput="formatPrice(this)"></div>
+        </div>
+      </div>
+
+      <button class="btn" onclick="runComps()" id="comp-btn">Find comparable properties</button>
+    </div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="ai-summary" id="ai-summary">
+      <div class="ai-label">🤖 AI Market Analysis</div>
+      <div class="ai-text" id="ai-text">Analyzing comparable sales...</div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><div class="stat-val" id="stat-comps">—</div><div class="stat-label">Comps found</div></div>
+      <div class="stat"><div class="stat-val" id="stat-median">—</div><div class="stat-label">Median price</div></div>
+      <div class="stat"><div class="stat-val" id="stat-ppsf">—</div><div class="stat-label">Avg $/sq ft</div></div>
+      <div class="stat"><div class="stat-val" id="stat-dom">—</div><div class="stat-label">Avg days on mkt</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-body" style="padding-bottom:1rem;">
+        <div class="section-hdr">
+          <span class="section-hdr-title" id="comps-count-label">Comparable properties</span>
+          <select class="sort-select" onchange="sortComps(this.value)">
+            <option value="price-desc">Price: High to Low</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="sqft-desc">Sq Ft: Largest</option>
+            <option value="ppsf-asc">$/Sq Ft: Lowest</option>
+          </select>
+        </div>
+        <div class="comps-list" id="comps-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>HomeReady AI · <a href="#">Nestara</a> · Comp data is representative — always verify with a licensed agent · <a href="mailto:nestara@nestarahq.com">nestara@nestarahq.com</a></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── UI Controls ──────────────────────────────────────────────────────────────
+function updateRadius(v) {
+  var vals = ['0.25','0.5','0.75','1.0','1.25','1.5','1.75','2.0','2.5','3.0','3.5','4.0','4.5','5.0'];
+  var idx = Math.round((v - 1) / 19 * (vals.length - 1));
+  document.getElementById('radius-val').textContent = vals[idx] + ' miles';
+}
+
+function updateSqft() {
+  var mn = parseInt(document.getElementById('sqft-min').value);
+  var mx = parseInt(document.getElementById('sqft-max').value);
+  if (mn > mx) { document.getElementById('sqft-min').value = mx; mn = mx; }
+  document.getElementById('sqft-val').textContent = mn.toLocaleString() + ' – ' + mx.toLocaleString() + ' sq ft';
+}
+
+function selectBed(btn, group) {
+  var grid = document.getElementById(group + '-grid');
+  grid.querySelectorAll('.bed-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function formatPrice(input) {
+  var raw = input.value.replace(/[^0-9]/g, '');
+  if (raw) input.value = '$' + parseInt(raw).toLocaleString();
+}
+
+// ── Mock comp data generator ─────────────────────────────────────────────────
+var mockCompsData = [];
+
+function generateMockComps(city, state, zip) {
+  city = city || 'Austin';
+  state = state || 'Texas';
+  zip = zip || '78701';
+
+  var streets = ['Oak Lane','Maple Drive','Cedar Court','Elm Street','Pine Avenue','Walnut Way','Birch Blvd','Willow Creek Dr','Sunset Ridge','Hillcrest Ave','River Bend Ln','Meadow View Dr'];
+  var basePrice = 285000;
+  if (state === 'California') basePrice = 750000;
+  else if (state === 'New York') basePrice = 620000;
+  else if (state === 'Florida') basePrice = 380000;
+  else if (state === 'Texas') basePrice = 310000;
+
+  var comps = [];
+  var count = 8 + Math.floor(Math.random() * 5);
+  for (var i = 0; i < count; i++) {
+    var variance = 0.75 + Math.random() * 0.5;
+    var price = Math.round(basePrice * variance / 1000) * 1000;
+    var sqft = 1200 + Math.floor(Math.random() * 1800);
+    var beds = 2 + Math.floor(Math.random() * 3);
+    var baths = 1 + Math.floor(Math.random() * 3);
+    var dom = Math.floor(Math.random() * 45) + 3;
+    var isSold = Math.random() > 0.35;
+    var num = 100 + Math.floor(Math.random() * 9800);
+    comps.push({
+      address: num + ' ' + streets[i % streets.length] + ', ' + city + ', ' + state + ' ' + zip,
+      price: price,
+      sqft: sqft,
+      beds: beds,
+      baths: baths,
+      dom: dom,
+      sold: isSold,
+      ppsf: Math.round(price / sqft)
+    });
+  }
+  return comps;
+}
+
+function fmtMoney(n) {
+  if (n >= 1000000) return '$' + (n/1000000).toFixed(2) + 'M';
+  if (n >= 1000) return '$' + Math.round(n/1000) + 'K';
+  return '$' + n.toLocaleString();
+}
+
+function renderComps(comps) {
+  var list = document.getElementById('comps-list');
+  list.innerHTML = comps.map(function(c) {
+    return '<div class="comp-card">' +
+      '<div>' +
+        '<div class="comp-addr">' + c.address + '</div>' +
+        '<div class="comp-details">' +
+          '<span class="comp-detail">🛏 ' + c.beds + ' bed</span>' +
+          '<span class="comp-detail">🚿 ' + c.baths + ' bath</span>' +
+          '<span class="comp-detail">📐 ' + c.sqft.toLocaleString() + ' sq ft</span>' +
+          '<span class="comp-detail">📅 ' + c.dom + ' days</span>' +
+        '</div>' +
+        '<span class="comp-badge ' + (c.sold ? 'badge-sold' : 'badge-active') + '">' + (c.sold ? '✓ Sold' : '● Active') + '</span>' +
+      '</div>' +
+      '<div>' +
+        '<div class="comp-price">$' + c.price.toLocaleString() + '</div>' +
+        '<div class="comp-ppsf">$' + c.ppsf + '/sq ft</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function sortComps(val) {
+  var sorted = mockCompsData.slice();
+  if (val === 'price-desc') sorted.sort(function(a,b){return b.price-a.price;});
+  else if (val === 'price-asc') sorted.sort(function(a,b){return a.price-b.price;});
+  else if (val === 'sqft-desc') sorted.sort(function(a,b){return b.sqft-a.sqft;});
+  else if (val === 'ppsf-asc') sorted.sort(function(a,b){return a.ppsf-b.ppsf;});
+  renderComps(sorted);
+}
+
+async function runComps() {
+  var btn = document.getElementById('comp-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spin"></div> Finding comps...';
+
+  var city = document.getElementById('s-city').value || 'Austin';
+  var state = document.getElementById('s-state').value || 'Texas';
+  var zip = document.getElementById('s-zip').value || '78701';
+  var address = document.getElementById('s-address').value || '123 Oak Street';
+
+  // Show results section
+  document.getElementById('results').classList.add('show');
+  document.getElementById('ai-text').textContent = 'Analyzing comparable sales in ' + city + ', ' + state + '...';
+
+  // Simulate API delay
+  await new Promise(function(r){setTimeout(r, 1800);});
+
+  // Generate mock comps
+  mockCompsData = generateMockComps(city, state, zip);
+
+  // Calculate stats
+  var prices = mockCompsData.map(function(c){return c.price;});
+  var sorted = prices.slice().sort(function(a,b){return a-b;});
+  var median = sorted[Math.floor(sorted.length/2)];
+  var avgPpsf = Math.round(mockCompsData.reduce(function(s,c){return s+c.ppsf;},0)/mockCompsData.length);
+  var avgDom = Math.round(mockCompsData.reduce(function(s,c){return s+c.dom;},0)/mockCompsData.length);
+  var low = fmtMoney(sorted[Math.floor(sorted.length*0.25)]);
+  var high = fmtMoney(sorted[Math.floor(sorted.length*0.75)]);
+
+  // Update stats
+  document.getElementById('stat-comps').textContent = mockCompsData.length;
+  document.getElementById('stat-median').textContent = fmtMoney(median);
+  document.getElementById('stat-ppsf').textContent = '$'+avgPpsf;
+  document.getElementById('stat-dom').textContent = avgDom+' days';
+  document.getElementById('comps-count-label').textContent = mockCompsData.length + ' comparable properties';
+
+  // Render comps
+  renderComps(mockCompsData);
+
+  // Get AI summary
+  try {
+    var prompt = 'You are a real estate market analyst. Based on ' + mockCompsData.length + ' comparable properties in ' + city + ', ' + state + ' with a median price of $' + median.toLocaleString() + ' and average price per sq ft of $' + avgPpsf + ', write a 2-sentence market analysis summary for a property at ' + address + '. Include the estimated fair market value range of ' + low + '–' + high + '. Be specific, professional, and concise. Start with "Based on".';
+    var r = await fetch('/.netlify/functions/claude', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({messages:[{role:'user',content:prompt}]})
+    });
+    var d = await r.json();
+    var aiText = d.content && d.content[0] ? d.content[0].text : null;
+    if (aiText) {
+      document.getElementById('ai-text').innerHTML = aiText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    } else {
+      document.getElementById('ai-text').innerHTML = 'Based on <strong>' + mockCompsData.length + ' comparable sales</strong> in ' + city + ', ' + state + ', the estimated fair market value range is <strong>' + low + ' – ' + high + '</strong>. The median sale price is <strong>' + fmtMoney(median) + '</strong> with an average of <strong>$' + avgPpsf + '/sq ft</strong> and properties selling in an average of <strong>' + avgDom + ' days</strong>.';
+    }
+  } catch(e) {
+    document.getElementById('ai-text').innerHTML = 'Based on <strong>' + mockCompsData.length + ' comparable sales</strong> in ' + city + ', ' + state + ', the estimated fair market value range is <strong>' + low + ' – ' + high + '</strong>. The median sale price is <strong>' + fmtMoney(median) + '</strong> at <strong>$' + avgPpsf + '/sq ft</strong>.';
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = 'Find comparable properties';
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>
