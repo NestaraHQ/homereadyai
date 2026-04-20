@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeReady AI — Beta Access</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#E8793C;--orange-dark:#C4622A;--orange-light:#FDF0E8;--bg:#F7F4EF;--dark:#1C1812;--mid:#6B5C4E;--muted:#A89888;--border:rgba(108,92,78,0.14);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:#fff;min-height:100vh;display:flex;flex-direction:column;}
+header{padding:0 2rem;display:flex;align-items:center;height:58px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-icon{width:32px;height:32px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:18px;height:18px;}
+.logo-name{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#fff;}
+.logo-by{font-size:11px;color:rgba(255,255,255,0.35);margin-left:3px;}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1.25rem;}
+.box{background:#242018;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:2.5rem 2rem;max-width:420px;width:100%;text-align:center;}
+.box-icon{width:64px;height:64px;background:rgba(232,121,60,0.12);border:2px solid rgba(232,121,60,0.25);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 1.5rem;}
+.box h1{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:700;color:#fff;margin-bottom:0.5rem;line-height:1.2;}
+.box p{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:2rem;font-weight:300;}
+.input-wrap{position:relative;margin-bottom:1rem;}
+.code-input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;color:#fff;text-align:center;letter-spacing:0.15em;text-transform:uppercase;outline:none;transition:all 0.2s;}
+.code-input::placeholder{letter-spacing:0.05em;font-weight:400;text-transform:none;color:rgba(255,255,255,0.2);}
+.code-input:focus{border-color:var(--orange);background:rgba(232,121,60,0.06);}
+.code-input.error{border-color:#C0392B;background:rgba(192,57,43,0.08);animation:shake 0.3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+.btn{width:100%;padding:14px;background:var(--orange);color:#fff;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:1rem;}
+.btn:hover{background:var(--orange-dark);transform:translateY(-1px);}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.error-msg{font-size:13px;color:#E07070;margin-bottom:1rem;display:none;}
+.error-msg.show{display:block;}
+.divider{display:flex;align-items:center;gap:12px;margin:1.25rem 0;}
+.divider span{font-size:12px;color:rgba(255,255,255,0.2);}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08);}
+.stripe-link{display:block;width:100%;padding:13px;background:transparent;color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;text-decoration:none;transition:all 0.2s;text-align:center;}
+.stripe-link:hover{border-color:var(--orange);color:var(--orange);}
+.attempts{font-size:11px;color:rgba(255,255,255,0.2);margin-top:1.25rem;}
+
+/* Success state */
+.success-state{display:none;text-align:center;}
+.success-state.show{display:block;}
+.form-state.hide{display:none;}
+.success-icon{font-size:48px;margin-bottom:1rem;}
+.success-state h2{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:0.5rem;}
+.success-state p{font-size:14px;color:rgba(255,255,255,0.55);line-height:1.7;margin-bottom:1.75rem;}
+.go-btn{display:block;width:100%;padding:14px;background:var(--orange);color:#fff;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;text-decoration:none;text-align:center;transition:all 0.2s;margin-bottom:10px;}
+.go-btn:hover{background:var(--orange-dark);}
+.beta-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(232,121,60,0.12);border:1px solid rgba(232,121,60,0.25);color:var(--orange);font-size:12px;font-weight:600;padding:4px 12px;border-radius:99px;margin-bottom:1.5rem;letter-spacing:0.04em;}
+.access-note{font-size:11px;color:rgba(255,255,255,0.2);line-height:1.6;}
+footer{padding:1.25rem;text-align:center;font-size:11px;color:rgba(255,255,255,0.2);border-top:1px solid rgba(255,255,255,0.05);}
+footer a{color:var(--orange);text-decoration:none;}
+</style>
+</head>
+<body>
+<header>
+<a class="logo" href="/">
+<div class="logo-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+<polyline points="9 22 9 12 15 12 15 22"/>
+</svg>
+</div>
+<span class="logo-name">HomeReady AI</span>
+<span class="logo-by">by Vero</span>
+</a>
+</header>
+
+<main>
+<div class="box">
+  <div class="box-icon">🔑</div>
+
+  <!-- Form state -->
+  <div class="form-state" id="form-state">
+    <h1>Enter your beta code</h1>
+    <p>Got an invite? Enter your code below for full free access to all HomeReady AI tools during the beta period.</p>
+
+    <div class="input-wrap">
+      <input type="text" class="code-input" id="code-input" placeholder="e.g. BETA2025" maxlength="20"
+        oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')redeemCode()">
+    </div>
+    <div class="error-msg" id="error-msg">❌ That code isn't valid. Double-check it or contact us.</div>
+
+    <button class="btn" id="redeem-btn" onclick="redeemCode()">
+      <span id="btn-inner">Unlock beta access →</span>
+    </button>
+
+    <div class="divider"><span>or</span></div>
+    <a href="https://buy.stripe.com/aFaaEXa3zeTj816e5x2wU00" class="stripe-link">Start 7-day free trial instead →</a>
+
+    <div class="attempts" id="attempts-note"></div>
+  </div>
+
+  <!-- Success state -->
+  <div class="success-state" id="success-state">
+    <div class="success-icon">🎉</div>
+    <div class="beta-pill">✦ Beta Access Unlocked</div>
+    <h2>You're in!</h2>
+    <p>All seven HomeReady AI tools are now unlocked for you. Welcome to the beta — your feedback helps shape the product.</p>
+    <a href="/app" class="go-btn">Open my tools →</a>
+    <div class="access-note">Access is stored in your browser. If you clear your browser data, you may need to re-enter your code.</div>
+  </div>
+</div>
+</main>
+
+<footer>HomeReady AI · <a href="#">Vero</a> · <a href="mailto:admin@homereadyai.co">admin@homereadyai.co</a></footer>
+
+<script>
+// ─────────────────────────────────────────────────────
+// BETA CODES — add/remove codes here freely
+// Each code can optionally have an expiry (ISO date string) or be permanent (null)
+// ─────────────────────────────────────────────────────
+var BETA_CODES = {
+  'BETA2025':   { expires: null,         label: 'General Beta' },
+  'VERO50':     { expires: null,         label: 'Vero Inner Circle' },
+  'HOMEREADY1': { expires: null,         label: 'Early Tester' },
+  'REALTORBETA':{ expires: null,         label: 'Agent Beta' },
+  'LOBETA':     { expires: null,         label: 'Loan Officer Beta' },
+  'BUYERBETA':  { expires: null,         label: 'Buyer Beta' },
+  'TESTDRIVE':  { expires: '2026-12-31', label: 'Limited Test Drive' },
+};
+
+var attempts = 0;
+var MAX_ATTEMPTS = 10;
+
+// Auto-redirect if already has beta access
+window.addEventListener('load', function() {
+  var access = localStorage.getItem('hrai_beta_access');
+  if (access) {
+    try {
+      var data = JSON.parse(access);
+      if (!data.expires || new Date(data.expires) > new Date()) {
+        showSuccess();
+        return;
+      }
+    } catch(e) {}
+  }
+  // Check for ?code= in URL for shareable links
+  var params = new URLSearchParams(window.location.search);
+  var urlCode = params.get('code');
+  if (urlCode) {
+    document.getElementById('code-input').value = urlCode.toUpperCase();
+    redeemCode();
+  }
+});
+
+function redeemCode() {
+  if (attempts >= MAX_ATTEMPTS) {
+    showError("Too many attempts. Please contact admin@homereadyai.co for help.");
+    return;
+  }
+
+  var input = document.getElementById('code-input');
+  var code = input.value.trim().toUpperCase();
+
+  if (!code) {
+    showError("Please enter a code.");
+    return;
+  }
+
+  // Set loading state
+  var btn = document.getElementById('redeem-btn');
+  btn.disabled = true;
+  document.getElementById('btn-inner').textContent = 'Checking...';
+
+  // Small delay for UX feel
+  setTimeout(function() {
+    if (BETA_CODES[code]) {
+      var entry = BETA_CODES[code];
+      // Check expiry
+      if (entry.expires && new Date(entry.expires) < new Date()) {
+        btn.disabled = false;
+        document.getElementById('btn-inner').textContent = 'Unlock beta access →';
+        showError("This code has expired. Contact admin@homereadyai.co for a new one.");
+        attempts++;
+        return;
+      }
+      // Valid! Grant access
+      var accessData = {
+        code: code,
+        label: entry.label,
+        expires: entry.expires,
+        grantedAt: new Date().toISOString()
+      };
+      localStorage.setItem('hrai_beta_access', JSON.stringify(accessData));
+      localStorage.setItem('hrai_subscription', 'beta'); // hook for paywall check
+      showSuccess();
+    } else {
+      attempts++;
+      btn.disabled = false;
+      document.getElementById('btn-inner').textContent = 'Unlock beta access →';
+      input.classList.add('error');
+      setTimeout(function(){ input.classList.remove('error'); }, 400);
+      showError("That code isn't valid. Double-check it or contact us.");
+      if (attempts >= MAX_ATTEMPTS) {
+        document.getElementById('attempts-note').textContent = "Too many failed attempts. Please email admin@homereadyai.co.";
+      } else if (attempts >= 3) {
+        document.getElementById('attempts-note').textContent = "Need help? Email admin@homereadyai.co";
+      }
+    }
+  }, 600);
+}
+
+function showError(msg) {
+  var el = document.getElementById('error-msg');
+  el.textContent = '❌ ' + msg;
+  el.classList.add('show');
+}
+
+function showSuccess() {
+  document.getElementById('form-state').classList.add('hide');
+  document.getElementById('success-state').classList.add('show');
+}
+</script>
+</body>
+</html>
