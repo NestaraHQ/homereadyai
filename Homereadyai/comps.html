@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HomeReady AI — Comp Tool</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root{--orange:#E8793C;--orange-dark:#C4622A;--orange-light:#FDF0E8;--bg:#F7F4EF;--white:#FFFFFF;--dark:#1C1812;--mid:#6B5C4E;--muted:#A89888;--border:rgba(108,92,78,0.14);--green:#1D9E75;--green-light:#E6F8F0;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -20,7 +22,7 @@ header{background:var(--dark);padding:0 2rem;display:flex;align-items:center;jus
 .hero-strip{background:var(--orange);padding:1rem 2rem;text-align:center;}
 .hero-strip h1{font-family:'Fraunces',serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:600;color:#fff;margin-bottom:0.25rem;}
 .hero-strip p{font-size:13px;color:rgba(255,255,255,0.85);font-weight:300;}
-.wrap{max-width:900px;margin:0 auto;padding:1.5rem 1.25rem 4rem;}
+.wrap{max-width:960px;margin:0 auto;padding:1.5rem 1.25rem 4rem;}
 .card{background:var(--white);border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:1.25rem;}
 .card-head{padding:1.25rem 1.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
 .card-icon{width:38px;height:38px;background:var(--orange-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
@@ -34,7 +36,7 @@ header{background:var(--dark);padding:0 2rem;display:flex;align-items:center;jus
 label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;}
 input,select{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);background:var(--bg);outline:none;transition:border-color 0.15s;}
 input:focus,select:focus{border-color:var(--orange);background:#fff;}
-.range-wrap{display:flex;flex-direction:column;gap:8px;}
+.range-wrap{display:flex;flex-direction:column;gap:6px;}
 .range-label-row{display:flex;justify-content:space-between;align-items:center;}
 .range-val{font-size:13px;font-weight:600;color:var(--orange);}
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:var(--border);border:none;padding:0;cursor:pointer;}
@@ -51,33 +53,60 @@ input[type=range]:focus{border-color:transparent;background:var(--border);}
 .btn:disabled{opacity:0.55;cursor:not-allowed;}
 .spin{width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:sp .65s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg);}}
+
+/* Results */
 .results{display:none;}
 .results.show{display:block;}
+
+/* AI Summary */
 .ai-summary{background:var(--dark);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;}
 .ai-label{font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;}
 .ai-text{font-size:15px;color:#fff;line-height:1.65;font-weight:300;}
 .ai-text strong{color:var(--orange);font-weight:600;}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.25rem;}
+
+/* Median callout */
+.median-callout{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.25rem;}
 .stat{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;}
+.stat.featured{border:2px solid var(--orange);background:var(--orange-light);}
 .stat-val{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--dark);line-height:1;}
+.stat.featured .stat-val{color:var(--orange-dark);}
 .stat-label{font-size:11px;color:var(--muted);margin-top:4px;font-weight:500;}
+
+/* View toggle */
+.view-toggle-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.view-label{font-size:13px;font-weight:600;color:var(--mid);text-transform:uppercase;letter-spacing:0.06em;}
+.view-controls{display:flex;align-items:center;gap:8px;}
+.view-btn{padding:6px 14px;border:1.5px solid var(--border);border-radius:8px;background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--mid);cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:5px;}
+.view-btn.active{background:var(--orange);border-color:var(--orange);color:#fff;}
+.sort-select{font-size:12px;padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;background:#fff;color:var(--mid);cursor:pointer;font-family:'DM Sans',sans-serif;}
+
+/* Map view */
+#map-container{display:none;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-bottom:1rem;}
+#map-container.show{display:block;}
+#comp-map{height:420px;width:100%;}
+
+/* List view */
 .comps-list{display:flex;flex-direction:column;gap:10px;}
-.comp-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;transition:all 0.15s;}
+.comp-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;transition:all 0.15s;cursor:pointer;}
 .comp-card:hover{border-color:rgba(232,121,60,0.3);box-shadow:0 4px 12px rgba(28,24,18,0.06);}
+.comp-card.selected{border-color:var(--orange);background:var(--orange-light);}
 .comp-addr{font-size:14px;font-weight:600;color:var(--dark);margin-bottom:3px;}
 .comp-details{font-size:12px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;}
-.comp-detail{display:flex;align-items:center;gap:4px;}
 .comp-price{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--dark);text-align:right;white-space:nowrap;}
 .comp-ppsf{font-size:11px;color:var(--muted);text-align:right;margin-top:2px;}
 .comp-badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;margin-top:4px;}
-.badge-sold{background:#E6F8F0;color:var(--green);}
+.badge-sold{background:var(--green-light);color:var(--green);}
 .badge-active{background:var(--orange-light);color:var(--orange-dark);}
-.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.section-hdr-title{font-size:13px;font-weight:600;color:var(--mid);text-transform:uppercase;letter-spacing:0.06em;}
-.sort-select{font-size:12px;padding:5px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--mid);cursor:pointer;font-family:'DM Sans',sans-serif;}
+.ppsf-bar{height:3px;background:var(--border);border-radius:2px;margin-top:6px;overflow:hidden;}
+.ppsf-fill{height:100%;background:var(--orange);border-radius:2px;transition:width 0.5s ease;}
+
 footer{background:var(--dark);text-align:center;padding:1.25rem;font-size:11px;color:rgba(255,255,255,0.3);}
 footer a{color:var(--orange);text-decoration:none;}
-@media(max-width:580px){.row,.row.three{grid-template-columns:1fr;}.beds-grid{grid-template-columns:repeat(3,1fr);}.stats-row{grid-template-columns:1fr 1fr;}.comp-card{grid-template-columns:1fr;}}
+@media(max-width:600px){
+  .row,.row.three{grid-template-columns:1fr;}
+  .beds-grid{grid-template-columns:repeat(3,1fr);}
+  .median-callout{grid-template-columns:1fr 1fr;}
+}
 </style>
 </head>
 <body>
@@ -101,13 +130,13 @@ footer a{color:var(--orange);text-decoration:none;}
 </div>
 
 <div class="wrap">
+  <!-- Search form -->
   <div class="card">
     <div class="card-head">
       <div class="card-icon">🏘️</div>
       <div><div class="card-title">Search comparable properties</div><div class="card-sub">Enter property details to find recent sales and active listings nearby</div></div>
     </div>
     <div class="card-body">
-
       <div class="row full" style="margin-bottom:12px">
         <div class="fg"><label>Subject property address</label><input type="text" id="s-address" placeholder="e.g. 123 Oak Street"></div>
       </div>
@@ -121,7 +150,6 @@ footer a{color:var(--orange);text-decoration:none;}
         </div>
         <div class="fg"><label>Zip code</label><input type="text" id="s-zip" placeholder="e.g. 78701" maxlength="5"></div>
       </div>
-
       <div class="row" style="margin-bottom:16px">
         <div class="fg">
           <div class="range-label-row"><label>Search radius</label><span class="range-val" id="radius-val">1.0 miles</span></div>
@@ -138,7 +166,6 @@ footer a{color:var(--orange);text-decoration:none;}
           </div>
         </div>
       </div>
-
       <div style="margin-bottom:16px">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
           <div class="fg">
@@ -165,7 +192,6 @@ footer a{color:var(--orange);text-decoration:none;}
           </div>
         </div>
       </div>
-
       <div style="margin-bottom:16px">
         <label style="display:block;margin-bottom:8px;">Price range</label>
         <div class="price-row">
@@ -174,35 +200,51 @@ footer a{color:var(--orange);text-decoration:none;}
           <div class="fg"><input type="text" id="price-max" placeholder="Max (e.g. $600,000)" oninput="formatPrice(this)"></div>
         </div>
       </div>
-
       <button class="btn" onclick="runComps()" id="comp-btn">Find comparable properties</button>
     </div>
   </div>
 
+  <!-- Results -->
   <div class="results" id="results">
+
+    <!-- AI Summary -->
     <div class="ai-summary" id="ai-summary">
       <div class="ai-label">🤖 AI Market Analysis</div>
       <div class="ai-text" id="ai-text">Analyzing comparable sales...</div>
     </div>
 
-    <div class="stats-row">
+    <!-- Median callout stats -->
+    <div class="median-callout">
+      <div class="stat featured"><div class="stat-val" id="stat-median">—</div><div class="stat-label">Median sale price</div></div>
       <div class="stat"><div class="stat-val" id="stat-comps">—</div><div class="stat-label">Comps found</div></div>
-      <div class="stat"><div class="stat-val" id="stat-median">—</div><div class="stat-label">Median price</div></div>
       <div class="stat"><div class="stat-val" id="stat-ppsf">—</div><div class="stat-label">Avg $/sq ft</div></div>
       <div class="stat"><div class="stat-val" id="stat-dom">—</div><div class="stat-label">Avg days on mkt</div></div>
     </div>
 
+    <!-- View toggle -->
     <div class="card">
       <div class="card-body" style="padding-bottom:1rem;">
-        <div class="section-hdr">
-          <span class="section-hdr-title" id="comps-count-label">Comparable properties</span>
-          <select class="sort-select" onchange="sortComps(this.value)">
-            <option value="price-desc">Price: High to Low</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="sqft-desc">Sq Ft: Largest</option>
-            <option value="ppsf-asc">$/Sq Ft: Lowest</option>
-          </select>
+        <div class="view-toggle-bar">
+          <span class="view-label" id="comps-count-label">Comparable properties</span>
+          <div class="view-controls">
+            <button class="view-btn active" id="btn-list" onclick="setView('list')">☰ List</button>
+            <button class="view-btn" id="btn-map" onclick="setView('map')">🗺 Map</button>
+            <select class="sort-select" onchange="sortComps(this.value)">
+              <option value="price-desc">Price: High → Low</option>
+              <option value="price-asc">Price: Low → High</option>
+              <option value="sqft-desc">Sq Ft: Largest</option>
+              <option value="ppsf-asc">$/Sq Ft: Lowest</option>
+              <option value="dom-asc">Days: Fewest</option>
+            </select>
+          </div>
         </div>
+
+        <!-- Map -->
+        <div id="map-container">
+          <div id="comp-map"></div>
+        </div>
+
+        <!-- List -->
         <div class="comps-list" id="comps-list"></div>
       </div>
     </div>
@@ -211,68 +253,84 @@ footer a{color:var(--orange);text-decoration:none;}
 
 <footer>HomeReady AI · <a href="#">Nestara</a> · Comp data is representative — always verify with a licensed agent · <a href="mailto:nestara@nestarahq.com">nestara@nestarahq.com</a></footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+var mockCompsData = [];
+var mapInstance = null;
+var mapMarkers = [];
+var currentView = 'list';
+var maxPpsf = 0;
+
 // ── UI Controls ──────────────────────────────────────────────────────────────
 function updateRadius(v) {
   var vals = ['0.25','0.5','0.75','1.0','1.25','1.5','1.75','2.0','2.5','3.0','3.5','4.0','4.5','5.0'];
   var idx = Math.round((v - 1) / 19 * (vals.length - 1));
   document.getElementById('radius-val').textContent = vals[idx] + ' miles';
 }
-
 function updateSqft() {
   var mn = parseInt(document.getElementById('sqft-min').value);
   var mx = parseInt(document.getElementById('sqft-max').value);
   if (mn > mx) { document.getElementById('sqft-min').value = mx; mn = mx; }
   document.getElementById('sqft-val').textContent = mn.toLocaleString() + ' – ' + mx.toLocaleString() + ' sq ft';
 }
-
 function selectBed(btn, group) {
-  var grid = document.getElementById(group + '-grid');
-  grid.querySelectorAll('.bed-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById(group + '-grid').querySelectorAll('.bed-btn').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
 }
-
 function formatPrice(input) {
   var raw = input.value.replace(/[^0-9]/g, '');
   if (raw) input.value = '$' + parseInt(raw).toLocaleString();
 }
 
-// ── Mock comp data generator ─────────────────────────────────────────────────
-var mockCompsData = [];
+// ── View toggle ───────────────────────────────────────────────────────────────
+function setView(v) {
+  currentView = v;
+  document.getElementById('btn-list').classList.toggle('active', v === 'list');
+  document.getElementById('btn-map').classList.toggle('active', v === 'map');
+  document.getElementById('map-container').classList.toggle('show', v === 'map');
+  document.getElementById('comps-list').style.display = v === 'list' ? 'flex' : 'none';
+  if (v === 'map' && mapInstance) {
+    setTimeout(function() { mapInstance.invalidateSize(); }, 100);
+  }
+}
+
+// ── Mock data ─────────────────────────────────────────────────────────────────
+var STATE_CENTERS = {
+  Texas: [30.2672, -97.7431], California: [34.0522, -118.2437],
+  Florida: [25.7617, -80.1918], 'New York': [40.7128, -74.0060],
+  Illinois: [41.8781, -87.6298], Washington: [47.6062, -122.3321],
+  Tennessee: [36.1627, -86.7816], Utah: [40.7608, -111.8910],
+  default: [30.2672, -97.7431]
+};
 
 function generateMockComps(city, state, zip) {
-  city = city || 'Austin';
-  state = state || 'Texas';
-  zip = zip || '78701';
-
-  var streets = ['Oak Lane','Maple Drive','Cedar Court','Elm Street','Pine Avenue','Walnut Way','Birch Blvd','Willow Creek Dr','Sunset Ridge','Hillcrest Ave','River Bend Ln','Meadow View Dr'];
-  var basePrice = 285000;
-  if (state === 'California') basePrice = 750000;
-  else if (state === 'New York') basePrice = 620000;
-  else if (state === 'Florida') basePrice = 380000;
-  else if (state === 'Texas') basePrice = 310000;
+  var center = STATE_CENTERS[state] || STATE_CENTERS.default;
+  var streets = ['Oak Lane','Maple Drive','Cedar Court','Elm Street','Pine Avenue','Walnut Way','Birch Blvd','Willow Creek Dr','Sunset Ridge','Hillcrest Ave','River Bend Ln','Meadow View Dr','Pecan Grove','Live Oak Blvd','Mockingbird Ln'];
+  var basePrice = 310000;
+  if (state === 'California') basePrice = 780000;
+  else if (state === 'New York') basePrice = 640000;
+  else if (state === 'Florida') basePrice = 395000;
+  else if (state === 'Washington') basePrice = 560000;
+  else if (state === 'Tennessee') basePrice = 340000;
 
   var comps = [];
-  var count = 8 + Math.floor(Math.random() * 5);
+  var count = 9 + Math.floor(Math.random() * 5);
   for (var i = 0; i < count; i++) {
-    var variance = 0.75 + Math.random() * 0.5;
+    var variance = 0.72 + Math.random() * 0.56;
     var price = Math.round(basePrice * variance / 1000) * 1000;
-    var sqft = 1200 + Math.floor(Math.random() * 1800);
+    var sqft = 1100 + Math.floor(Math.random() * 2200);
     var beds = 2 + Math.floor(Math.random() * 3);
     var baths = 1 + Math.floor(Math.random() * 3);
-    var dom = Math.floor(Math.random() * 45) + 3;
-    var isSold = Math.random() > 0.35;
+    var dom = Math.floor(Math.random() * 48) + 2;
+    var isSold = Math.random() > 0.3;
     var num = 100 + Math.floor(Math.random() * 9800);
+    var lat = center[0] + (Math.random() - 0.5) * 0.06;
+    var lng = center[1] + (Math.random() - 0.5) * 0.06;
     comps.push({
-      address: num + ' ' + streets[i % streets.length] + ', ' + city + ', ' + state + ' ' + zip,
-      price: price,
-      sqft: sqft,
-      beds: beds,
-      baths: baths,
-      dom: dom,
-      sold: isSold,
-      ppsf: Math.round(price / sqft)
+      address: num + ' ' + streets[i % streets.length],
+      fullAddress: num + ' ' + streets[i % streets.length] + ', ' + (city||'Austin') + ', ' + (state||'Texas') + ' ' + (zip||'78701'),
+      price: price, sqft: sqft, beds: beds, baths: baths,
+      dom: dom, sold: isSold, ppsf: Math.round(price / sqft),
+      lat: lat, lng: lng
     });
   }
   return comps;
@@ -284,18 +342,22 @@ function fmtMoney(n) {
   return '$' + n.toLocaleString();
 }
 
+// ── Render list ───────────────────────────────────────────────────────────────
 function renderComps(comps) {
+  maxPpsf = Math.max.apply(null, comps.map(function(c){return c.ppsf;}));
   var list = document.getElementById('comps-list');
-  list.innerHTML = comps.map(function(c) {
-    return '<div class="comp-card">' +
+  list.innerHTML = comps.map(function(c, i) {
+    var barW = Math.round((c.ppsf / maxPpsf) * 100);
+    return '<div class="comp-card" id="cc-'+i+'" onclick="highlightComp('+i+')">' +
       '<div>' +
         '<div class="comp-addr">' + c.address + '</div>' +
         '<div class="comp-details">' +
-          '<span class="comp-detail">🛏 ' + c.beds + ' bed</span>' +
-          '<span class="comp-detail">🚿 ' + c.baths + ' bath</span>' +
-          '<span class="comp-detail">📐 ' + c.sqft.toLocaleString() + ' sq ft</span>' +
-          '<span class="comp-detail">📅 ' + c.dom + ' days</span>' +
+          '<span>🛏 ' + c.beds + ' bd</span>' +
+          '<span>🚿 ' + c.baths + ' ba</span>' +
+          '<span>📐 ' + c.sqft.toLocaleString() + ' sf</span>' +
+          '<span>📅 ' + c.dom + ' days</span>' +
         '</div>' +
+        '<div class="ppsf-bar"><div class="ppsf-fill" style="width:'+barW+'%"></div></div>' +
         '<span class="comp-badge ' + (c.sold ? 'badge-sold' : 'badge-active') + '">' + (c.sold ? '✓ Sold' : '● Active') + '</span>' +
       '</div>' +
       '<div>' +
@@ -306,15 +368,64 @@ function renderComps(comps) {
   }).join('');
 }
 
+function highlightComp(idx) {
+  document.querySelectorAll('.comp-card').forEach(function(c){c.classList.remove('selected');});
+  var card = document.getElementById('cc-'+idx);
+  if (card) card.classList.add('selected');
+  if (mapMarkers[idx]) {
+    mapMarkers[idx].openPopup();
+    setView('map');
+  }
+}
+
+// ── Map ───────────────────────────────────────────────────────────────────────
+function initMap(comps, center) {
+  if (mapInstance) { mapInstance.remove(); mapInstance = null; }
+  mapMarkers = [];
+  mapInstance = L.map('comp-map').setView(center, 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors', maxZoom: 18
+  }).addTo(mapInstance);
+
+  // Subject property marker
+  var subjectIcon = L.divIcon({
+    html: '<div style="background:#1C1812;color:#fff;font-size:11px;font-weight:700;padding:4px 8px;border-radius:8px;white-space:nowrap;border:2px solid #E8793C;">📍 Subject</div>',
+    className: '', iconAnchor: [40, 20]
+  });
+  L.marker(center, {icon: subjectIcon}).addTo(mapInstance);
+
+  comps.forEach(function(c, i) {
+    var color = c.sold ? '#1D9E75' : '#E8793C';
+    var icon = L.divIcon({
+      html: '<div style="background:'+color+';color:#fff;font-size:11px;font-weight:700;padding:4px 8px;border-radius:8px;white-space:nowrap;cursor:pointer;">$'+Math.round(c.price/1000)+'K</div>',
+      className: '', iconAnchor: [24, 16]
+    });
+    var marker = L.marker([c.lat, c.lng], {icon: icon}).addTo(mapInstance);
+    marker.bindPopup(
+      '<div style="font-family:sans-serif;min-width:180px;">' +
+      '<div style="font-weight:700;font-size:13px;margin-bottom:4px;">$' + c.price.toLocaleString() + '</div>' +
+      '<div style="font-size:12px;color:#666;margin-bottom:6px;">' + c.fullAddress + '</div>' +
+      '<div style="font-size:12px;display:flex;gap:8px;">' +
+        '<span>🛏 ' + c.beds + '</span><span>🚿 ' + c.baths + '</span><span>📐 ' + c.sqft.toLocaleString() + ' sf</span>' +
+      '</div>' +
+      '<div style="margin-top:4px;font-size:11px;color:' + color + ';font-weight:600;">' + (c.sold ? '✓ Sold' : '● Active') + '</div>' +
+      '</div>'
+    );
+    mapMarkers.push(marker);
+  });
+}
+
 function sortComps(val) {
   var sorted = mockCompsData.slice();
   if (val === 'price-desc') sorted.sort(function(a,b){return b.price-a.price;});
   else if (val === 'price-asc') sorted.sort(function(a,b){return a.price-b.price;});
   else if (val === 'sqft-desc') sorted.sort(function(a,b){return b.sqft-a.sqft;});
   else if (val === 'ppsf-asc') sorted.sort(function(a,b){return a.ppsf-b.ppsf;});
+  else if (val === 'dom-asc') sorted.sort(function(a,b){return a.dom-b.dom;});
   renderComps(sorted);
 }
 
+// ── Main search ───────────────────────────────────────────────────────────────
 async function runComps() {
   var btn = document.getElementById('comp-btn');
   btn.disabled = true;
@@ -325,17 +436,14 @@ async function runComps() {
   var zip = document.getElementById('s-zip').value || '78701';
   var address = document.getElementById('s-address').value || '123 Oak Street';
 
-  // Show results section
   document.getElementById('results').classList.add('show');
   document.getElementById('ai-text').textContent = 'Analyzing comparable sales in ' + city + ', ' + state + '...';
 
-  // Simulate API delay
-  await new Promise(function(r){setTimeout(r, 1800);});
+  await new Promise(function(r){setTimeout(r, 1600);});
 
-  // Generate mock comps
   mockCompsData = generateMockComps(city, state, zip);
 
-  // Calculate stats
+  // Stats
   var prices = mockCompsData.map(function(c){return c.price;});
   var sorted = prices.slice().sort(function(a,b){return a-b;});
   var median = sorted[Math.floor(sorted.length/2)];
@@ -344,33 +452,32 @@ async function runComps() {
   var low = fmtMoney(sorted[Math.floor(sorted.length*0.25)]);
   var high = fmtMoney(sorted[Math.floor(sorted.length*0.75)]);
 
-  // Update stats
   document.getElementById('stat-comps').textContent = mockCompsData.length;
   document.getElementById('stat-median').textContent = fmtMoney(median);
-  document.getElementById('stat-ppsf').textContent = '$'+avgPpsf;
-  document.getElementById('stat-dom').textContent = avgDom+' days';
+  document.getElementById('stat-ppsf').textContent = '$' + avgPpsf;
+  document.getElementById('stat-dom').textContent = avgDom + ' days';
   document.getElementById('comps-count-label').textContent = mockCompsData.length + ' comparable properties';
 
-  // Render comps
   renderComps(mockCompsData);
 
-  // Get AI summary
+  // Init map
+  var center = (STATE_CENTERS[state] || STATE_CENTERS.default);
+  initMap(mockCompsData, center);
+
+  // AI summary
   try {
-    var prompt = 'You are a real estate market analyst. Based on ' + mockCompsData.length + ' comparable properties in ' + city + ', ' + state + ' with a median price of $' + median.toLocaleString() + ' and average price per sq ft of $' + avgPpsf + ', write a 2-sentence market analysis summary for a property at ' + address + '. Include the estimated fair market value range of ' + low + '–' + high + '. Be specific, professional, and concise. Start with "Based on".';
+    var prompt = 'You are a real estate market analyst. Based on ' + mockCompsData.length + ' comparable properties in ' + city + ', ' + state + ' with a median price of $' + median.toLocaleString() + ' and average $' + avgPpsf + '/sq ft, write a 2-sentence market analysis for ' + address + '. Estimated fair value range: ' + low + '–' + high + '. Be specific and professional. Start with "Based on".';
     var r = await fetch('/.netlify/functions/claude', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      method: 'POST', headers: {'Content-Type':'application/json'},
       body: JSON.stringify({messages:[{role:'user',content:prompt}]})
     });
     var d = await r.json();
-    var aiText = d.content && d.content[0] ? d.content[0].text : null;
-    if (aiText) {
-      document.getElementById('ai-text').innerHTML = aiText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    } else {
-      document.getElementById('ai-text').innerHTML = 'Based on <strong>' + mockCompsData.length + ' comparable sales</strong> in ' + city + ', ' + state + ', the estimated fair market value range is <strong>' + low + ' – ' + high + '</strong>. The median sale price is <strong>' + fmtMoney(median) + '</strong> with an average of <strong>$' + avgPpsf + '/sq ft</strong> and properties selling in an average of <strong>' + avgDom + ' days</strong>.';
-    }
+    var txt = d.content && d.content[0] ? d.content[0].text : null;
+    document.getElementById('ai-text').innerHTML = txt
+      ? txt.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+      : 'Based on <strong>' + mockCompsData.length + ' comparable sales</strong> in ' + city + ', ' + state + ', the estimated fair market value range is <strong>' + low + ' – ' + high + '</strong>. Median sale price is <strong>' + fmtMoney(median) + '</strong> at <strong>$' + avgPpsf + '/sq ft</strong>.';
   } catch(e) {
-    document.getElementById('ai-text').innerHTML = 'Based on <strong>' + mockCompsData.length + ' comparable sales</strong> in ' + city + ', ' + state + ', the estimated fair market value range is <strong>' + low + ' – ' + high + '</strong>. The median sale price is <strong>' + fmtMoney(median) + '</strong> at <strong>$' + avgPpsf + '/sq ft</strong>.';
+    document.getElementById('ai-text').innerHTML = 'Based on <strong>' + mockCompsData.length + ' comparable sales</strong>, estimated fair value is <strong>' + low + ' – ' + high + '</strong> with a median of <strong>' + fmtMoney(median) + '</strong>.';
   }
 
   btn.disabled = false;
