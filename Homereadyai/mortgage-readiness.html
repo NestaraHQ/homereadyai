@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeReady AI — Mortgage Readiness Score</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#E8793C;--orange-dark:#C4622A;--orange-light:#FDF0E8;--bg:#F7F4EF;--white:#FFFFFF;--dark:#1C1812;--mid:#6B5C4E;--muted:#A89888;--border:rgba(108,92,78,0.14);--green:#1D9E75;--green-light:#E6F8F0;--amber:#C9A227;--amber-light:#FFF8E7;--red:#C0392B;--red-light:#FDECEA;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+header{background:var(--dark);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-icon{width:32px;height:32px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:18px;height:18px;}
+.logo-name{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#fff;}
+.logo-by{font-size:11px;color:rgba(255,255,255,0.35);margin-left:3px;}
+.back-link{font-size:13px;color:rgba(255,255,255,0.45);text-decoration:none;transition:color 0.2s;}
+.back-link:hover{color:#fff;}
+.hero-strip{background:var(--orange);padding:1.25rem 2rem;text-align:center;}
+.hero-strip h1{font-family:'Fraunces',serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:600;color:#fff;margin-bottom:0.25rem;}
+.hero-strip p{font-size:13px;color:rgba(255,255,255,0.85);font-weight:300;}
+.wrap{max-width:720px;margin:0 auto;padding:1.5rem 1.25rem 4rem;}
+
+/* Cards */
+.card{background:var(--white);border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:1.25rem;}
+.card-head{padding:1.25rem 1.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.card-icon{width:38px;height:38px;background:var(--orange-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.card-title{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--dark);}
+.card-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.card-body{padding:1.25rem 1.5rem 1.5rem;}
+.section-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;margin-top:4px;}
+.divider{height:1px;background:var(--border);margin:16px 0;}
+
+/* Form */
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.row.full{grid-template-columns:1fr;}
+.row.three{grid-template-columns:1fr 1fr 1fr;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;}
+input,select{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);background:var(--bg);outline:none;transition:border-color 0.15s;}
+input:focus,select:focus{border-color:var(--orange);background:#fff;}
+.input-prefix{position:relative;}
+.input-prefix span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted);pointer-events:none;}
+.input-prefix input{padding-left:24px;}
+
+/* Btn */
+.btn{width:100%;padding:13px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn:hover{background:var(--orange-dark);}
+.btn:disabled{opacity:0.55;cursor:not-allowed;}
+.spin{width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:sp .65s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+/* Results */
+.results{display:none;}
+.results.show{display:block;}
+
+/* Score ring */
+.score-card{background:var(--dark);border-radius:20px;padding:2rem;margin-bottom:1.25rem;text-align:center;position:relative;overflow:hidden;}
+.score-card::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(232,121,60,0.15),transparent 70%);pointer-events:none;}
+.score-ring-wrap{display:flex;justify-content:center;margin-bottom:1.25rem;}
+.score-ring{position:relative;width:160px;height:160px;}
+.score-ring svg{transform:rotate(-90deg);}
+.score-ring-bg{fill:none;stroke:rgba(255,255,255,0.08);stroke-width:12;}
+.score-ring-fill{fill:none;stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);}
+.score-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.score-num-val{font-family:'Fraunces',serif;font-size:48px;font-weight:700;color:#fff;line-height:1;}
+.score-num-max{font-size:13px;color:rgba(255,255,255,0.35);margin-top:2px;}
+.score-grade{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:4px;}
+.score-tagline{font-size:14px;color:rgba(255,255,255,0.55);font-weight:300;}
+
+/* Factor bars */
+.factors{display:flex;flex-direction:column;gap:10px;margin-bottom:1.25rem;}
+.factor{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:12px 14px;}
+.factor-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.factor-name{font-size:13px;font-weight:500;color:#fff;}
+.factor-score{font-size:12px;font-weight:600;}
+.factor-bar{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;}
+.factor-fill{height:100%;border-radius:2px;transition:width 0.8s ease;}
+.factor-note{font-size:11px;color:rgba(255,255,255,0.35);margin-top:5px;}
+
+/* AI feedback */
+.ai-feedback{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:1.25rem 1.5rem;margin-bottom:1.25rem;}
+.ai-label{font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;}
+.feedback-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.feedback-item:last-child{border-bottom:none;}
+.feedback-icon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:1px;}
+.feedback-icon.good{background:var(--green-light);}
+.feedback-icon.warn{background:var(--amber-light);}
+.feedback-icon.bad{background:var(--red-light);}
+.feedback-text{font-size:13px;color:var(--mid);line-height:1.6;}
+.feedback-text strong{color:var(--dark);}
+
+/* Share card */
+.share-section{background:var(--dark);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;}
+.share-label{font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;}
+.share-card-preview{background:linear-gradient(135deg,#242018,#2E2416);border:1px solid rgba(232,121,60,0.2);border-radius:12px;padding:1.25rem;margin-bottom:12px;display:flex;align-items:center;gap:1rem;}
+.share-score-badge{width:64px;height:64px;background:var(--orange);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.share-score-num{font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:#fff;line-height:1;}
+.share-score-sub{font-size:9px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.05em;}
+.share-card-text h3{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:#fff;margin-bottom:3px;}
+.share-card-text p{font-size:12px;color:rgba(255,255,255,0.45);line-height:1.5;}
+.share-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.share-btn{padding:10px;border:1px solid rgba(255,255,255,0.12);border-radius:9px;background:rgba(255,255,255,0.05);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.share-btn:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.25);}
+.share-btn.copy-btn-share{border-color:rgba(232,121,60,0.4);color:var(--orange);}
+
+/* Next steps */
+.next-steps{display:flex;flex-direction:column;gap:8px;}
+.next-step{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-decoration:none;transition:all 0.15s;}
+.next-step:hover{border-color:rgba(232,121,60,0.3);box-shadow:0 4px 12px rgba(28,24,18,0.06);}
+.next-step-text{font-size:13px;font-weight:500;color:var(--dark);}
+.next-step-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.next-step-arrow{color:var(--orange);font-size:16px;flex-shrink:0;}
+
+footer{background:var(--dark);text-align:center;padding:1.25rem;font-size:11px;color:rgba(255,255,255,0.3);}
+footer a{color:var(--orange);text-decoration:none;}
+@media(max-width:580px){.row,.row.three{grid-template-columns:1fr;}.share-btns{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="/app">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <span class="logo-name">HomeReady AI</span>
+    <span class="logo-by">by Nestara</span>
+  </a>
+  <a href="/app" class="back-link">← Back to tools</a>
+</header>
+
+<div class="hero-strip">
+  <h1>Mortgage Readiness Score</h1>
+  <p>Find out how ready you are to buy a home — in under 2 minutes</p>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon">🏡</div>
+      <div><div class="card-title">Your financial snapshot</div><div class="card-sub">All information stays private — we never store or share your data</div></div>
+    </div>
+    <div class="card-body">
+
+      <div class="section-label">Income & employment</div>
+      <div class="row">
+        <div class="fg">
+          <label>Annual gross income</label>
+          <div class="input-prefix"><span>$</span><input type="text" id="income" placeholder="e.g. 85,000" oninput="fmtNum(this)"></div>
+        </div>
+        <div class="fg">
+          <label>Employment status</label>
+          <select id="employment">
+            <option value="full-time-employed">Full-time employed (W-2)</option>
+            <option value="self-employed">Self-employed / 1099</option>
+            <option value="part-time">Part-time employed</option>
+            <option value="retired">Retired</option>
+            <option value="unemployed">Currently unemployed</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="fg">
+          <label>Years at current job</label>
+          <select id="job-years">
+            <option value="0">Less than 6 months</option>
+            <option value="0.5">6–12 months</option>
+            <option value="1">1–2 years</option>
+            <option value="2" selected>2–5 years</option>
+            <option value="5">5+ years</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Co-borrower income (optional)</label>
+          <div class="input-prefix"><span>$</span><input type="text" id="co-income" placeholder="e.g. 45,000" oninput="fmtNum(this)"></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-label">Monthly debts</div>
+      <div class="row three">
+        <div class="fg">
+          <label>Car payment(s)</label>
+          <div class="input-prefix"><span>$</span><input type="text" id="debt-car" placeholder="0" oninput="fmtNum(this)"></div>
+        </div>
+        <div class="fg">
+          <label>Student loans</label>
+          <div class="input-prefix"><span>$</span><input type="text" id="debt-student" placeholder="0" oninput="fmtNum(this)"></div>
+        </div>
+        <div class="fg">
+          <label>Credit card minimums</label>
+          <div class="input-prefix"><span>$</span><input type="text" id="debt-cc" placeholder="0" oninput="fmtNum(this)"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="fg">
+          <label>Other monthly debts</label>
+          <div class="input-prefix"><span>$</span><input type="text" id="debt-other" placeholder="0" oninput="fmtNum(this)"></div>
+        </div>
+        <div class="fg">
+          <label>Target home price</label>
+          <div class="input-prefix"><span>$</span><input type="text" id="home-price" placeholder="e.g. 350,000" oninput="fmtNum(this)"></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-label">Credit & savings</div>
+      <div class="row">
+        <div class="fg">
+          <label>Credit score range</label>
+          <select id="credit-score">
+            <option value="760">Excellent (760+)</option>
+            <option value="720" selected>Very good (720–759)</option>
+            <option value="680">Good (680–719)</option>
+            <option value="640">Fair (640–679)</option>
+            <option value="600">Poor (600–639)</option>
+            <option value="550">Very poor (below 600)</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Total savings / down payment</label>
+          <div class="input-prefix"><span>$</span><input type="text" id="savings" placeholder="e.g. 40,000" oninput="fmtNum(this)"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="fg">
+          <label>Active collections or judgments?</label>
+          <select id="collections">
+            <option value="none">No collections or judgments</option>
+            <option value="minor">Minor collections (under $1K)</option>
+            <option value="major">Major collections or judgments</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Previous bankruptcy?</label>
+          <select id="bankruptcy">
+            <option value="none">No bankruptcy</option>
+            <option value="recent">Within last 2 years</option>
+            <option value="old">2–7 years ago</option>
+            <option value="discharged">Over 7 years ago</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-label">State & loan type</div>
+      <div class="row">
+        <div class="fg">
+          <label>State you're buying in</label>
+          <select id="buy-state">
+            <option value="">— select state —</option>
+            <option selected>Texas</option><option>California</option><option>Florida</option><option>New York</option><option>Illinois</option><option>Washington</option><option>Tennessee</option><option>Utah</option><option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Vermont</option><option>Virginia</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>First-time home buyer?</label>
+          <select id="first-time">
+            <option value="yes">Yes — first-time buyer</option>
+            <option value="no">No — I've owned before</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcScore()" id="score-btn">Calculate my mortgage readiness score</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+
+    <!-- Score ring -->
+    <div class="score-card" id="score-card">
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <svg viewBox="0 0 160 160" width="160" height="160">
+            <circle class="score-ring-bg" cx="80" cy="80" r="68"/>
+            <circle class="score-ring-fill" id="score-ring-fill" cx="80" cy="80" r="68" stroke-dasharray="427" stroke-dashoffset="427"/>
+          </svg>
+          <div class="score-num">
+            <div class="score-num-val" id="score-display">0</div>
+            <div class="score-num-max">/100</div>
+          </div>
+        </div>
+      </div>
+      <div class="score-grade" id="score-grade">Calculating...</div>
+      <div class="score-tagline" id="score-tagline"></div>
+
+      <!-- Factor bars -->
+      <div class="factors" id="factors-list" style="margin-top:1.25rem;text-align:left;"></div>
+    </div>
+
+    <!-- AI Feedback -->
+    <div class="ai-feedback">
+      <div class="ai-label">🤖 Personalized feedback</div>
+      <div id="feedback-list"></div>
+    </div>
+
+    <!-- Share card -->
+    <div class="share-section">
+      <div class="share-label">📤 Share your score</div>
+      <div class="share-card-preview">
+        <div class="share-score-badge">
+          <div class="share-score-num" id="share-score-num">—</div>
+          <div class="share-score-sub">/ 100</div>
+        </div>
+        <div class="share-card-text">
+          <h3 id="share-grade-text">My Mortgage Readiness Score</h3>
+          <p>Scored on HomeReady AI · homereadyai.netlify.app<br>Get your free score in under 2 minutes!</p>
+        </div>
+      </div>
+      <div class="share-btns">
+        <button class="share-btn copy-btn-share" onclick="copyShareText()">📋 Copy share text</button>
+        <button class="share-btn" onclick="shareTwitter()">𝕏 Share on X</button>
+        <button class="share-btn" onclick="copyLink()">🔗 Copy link</button>
+        <button class="share-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+      </div>
+    </div>
+
+    <!-- Next steps -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon">🗺️</div>
+        <div><div class="card-title">Your next steps</div><div class="card-sub">Tools to help you move forward</div></div>
+      </div>
+      <div class="card-body">
+        <div class="next-steps">
+          <a href="/comps" class="next-step">
+            <div><div class="next-step-text">🏘️ Search comparable homes</div><div class="next-step-sub">See what homes in your target area are selling for</div></div>
+            <div class="next-step-arrow">→</div>
+          </a>
+          <a href="/app" class="next-step">
+            <div><div class="next-step-text">📄 Understand your contract</div><div class="next-step-sub">Paste any clause for a plain-English breakdown</div></div>
+            <div class="next-step-arrow">→</div>
+          </a>
+          <a href="/app" class="next-step">
+            <div><div class="next-step-text">✉️ Write your offer email</div><div class="next-step-sub">Draft a professional offer letter in seconds</div></div>
+            <div class="next-step-arrow">→</div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>HomeReady AI · <a href="#">Nestara</a> · Not financial advice · <a href="mailto:nestara@nestarahq.com">nestara@nestarahq.com</a></footer>
+
+<script>
+function fmtNum(input) {
+  var raw = input.value.replace(/[^0-9]/g,'');
+  if (raw) input.value = parseInt(raw).toLocaleString();
+}
+
+function parseNum(id) {
+  var val = document.getElementById(id).value.replace(/[^0-9]/g,'');
+  return val ? parseInt(val) : 0;
+}
+
+// ── Scoring logic ─────────────────────────────────────────────────────────────
+function calcScore() {
+  var btn = document.getElementById('score-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spin"></div> Calculating your score...';
+
+  // Gather inputs
+  var income = parseNum('income');
+  var coIncome = parseNum('co-income');
+  var totalIncome = income + coIncome;
+  var employment = document.getElementById('employment').value;
+  var jobYears = parseFloat(document.getElementById('job-years').value);
+  var debtCar = parseNum('debt-car');
+  var debtStudent = parseNum('debt-student');
+  var debtCC = parseNum('debt-cc');
+  var debtOther = parseNum('debt-other');
+  var totalMonthlyDebt = debtCar + debtStudent + debtCC + debtOther;
+  var homePrice = parseNum('home-price') || 300000;
+  var creditScore = parseInt(document.getElementById('credit-score').value);
+  var savings = parseNum('savings');
+  var collections = document.getElementById('collections').value;
+  var bankruptcy = document.getElementById('bankruptcy').value;
+  var state = document.getElementById('buy-state').value || 'Texas';
+  var firstTime = document.getElementById('first-time').value;
+
+  // Monthly income
+  var monthlyIncome = totalIncome / 12;
+
+  // DTI calculation
+  var estimatedMortgage = homePrice * 0.006; // rough PITI estimate
+  var frontEndDTI = monthlyIncome > 0 ? (estimatedMortgage / monthlyIncome) * 100 : 999;
+  var backEndDTI = monthlyIncome > 0 ? ((totalMonthlyDebt + estimatedMortgage) / monthlyIncome) * 100 : 999;
+
+  // Down payment %
+  var downPct = homePrice > 0 ? (savings / homePrice) * 100 : 0;
+
+  // ── Factor scores (each 0–100) ─────────────────────────────
+  var factors = {};
+
+  // 1. Credit score (25pts weight)
+  if (creditScore >= 760) factors.credit = 100;
+  else if (creditScore >= 720) factors.credit = 85;
+  else if (creditScore >= 680) factors.credit = 68;
+  else if (creditScore >= 640) factors.credit = 48;
+  else if (creditScore >= 600) factors.credit = 28;
+  else factors.credit = 10;
+
+  // 2. DTI ratio (25pts weight)
+  if (backEndDTI < 28) factors.dti = 100;
+  else if (backEndDTI < 36) factors.dti = 85;
+  else if (backEndDTI < 43) factors.dti = 65;
+  else if (backEndDTI < 50) factors.dti = 35;
+  else factors.dti = 10;
+
+  // 3. Down payment (20pts weight)
+  if (downPct >= 20) factors.down = 100;
+  else if (downPct >= 10) factors.down = 80;
+  else if (downPct >= 5) factors.down = 60;
+  else if (downPct >= 3) factors.down = 40;
+  else if (downPct >= 1) factors.down = 20;
+  else factors.down = 5;
+
+  // 4. Employment (15pts weight)
+  if (employment === 'full-time-employed') factors.employment = jobYears >= 2 ? 100 : jobYears >= 1 ? 75 : 45;
+  else if (employment === 'self-employed') factors.employment = jobYears >= 2 ? 70 : 30;
+  else if (employment === 'retired') factors.employment = 85;
+  else if (employment === 'part-time') factors.employment = 45;
+  else factors.employment = 5;
+
+  // 5. Credit history (15pts weight)
+  var historyScore = 100;
+  if (collections === 'minor') historyScore -= 25;
+  else if (collections === 'major') historyScore -= 55;
+  if (bankruptcy === 'recent') historyScore -= 60;
+  else if (bankruptcy === 'old') historyScore -= 30;
+  else if (bankruptcy === 'discharged') historyScore -= 10;
+  factors.history = Math.max(5, historyScore);
+
+  // ── Weighted total ──────────────────────────────────────────
+  var total = Math.round(
+    factors.credit * 0.25 +
+    factors.dti * 0.25 +
+    factors.down * 0.20 +
+    factors.employment * 0.15 +
+    factors.history * 0.15
+  );
+
+  // Grade
+  var grade, tagline, gradeColor;
+  if (total >= 85) { grade = 'Excellent'; tagline = "You're in great shape — most lenders will welcome your application."; gradeColor = '#1D9E75'; }
+  else if (total >= 70) { grade = 'Very Good'; tagline = "Strong profile — a few tweaks could get you to excellent."; gradeColor = '#2E8B57'; }
+  else if (total >= 55) { grade = 'Good'; tagline = "You're on track — some areas to strengthen before applying."; gradeColor = '#C9A227'; }
+  else if (total >= 40) { grade = 'Fair'; tagline = "There are some hurdles, but they're manageable with a plan."; gradeColor = '#E8793C'; }
+  else { grade = 'Needs Work'; tagline = "Let's build a roadmap to get you mortgage-ready."; gradeColor = '#C0392B'; }
+
+  // Show results
+  document.getElementById('results').classList.add('show');
+  setTimeout(function() {
+    animateScore(total, gradeColor);
+    renderFactors(factors, gradeColor);
+    renderFeedback(factors, backEndDTI, downPct, creditScore, employment, jobYears, collections, bankruptcy, firstTime, state, total);
+    document.getElementById('score-grade').textContent = grade;
+    document.getElementById('score-grade').style.color = gradeColor;
+    document.getElementById('score-tagline').textContent = tagline;
+    document.getElementById('share-score-num').textContent = total;
+    document.getElementById('share-grade-text').textContent = 'I scored ' + total + '/100 — ' + grade;
+  }, 400);
+
+  btn.disabled = false;
+  btn.innerHTML = 'Recalculate score';
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function animateScore(target, color) {
+  var fill = document.getElementById('score-ring-fill');
+  var display = document.getElementById('score-display');
+  var circumference = 427;
+  fill.style.stroke = color;
+  var offset = circumference - (target / 100) * circumference;
+  fill.style.strokeDashoffset = offset;
+  // Count up
+  var start = 0;
+  var duration = 1200;
+  var step = Math.ceil(target / (duration / 16));
+  var iv = setInterval(function() {
+    start = Math.min(start + step, target);
+    display.textContent = start;
+    if (start >= target) clearInterval(iv);
+  }, 16);
+}
+
+function renderFactors(factors, color) {
+  var list = document.getElementById('factors-list');
+  var items = [
+    { key: 'credit', label: 'Credit score', note: '' },
+    { key: 'dti', label: 'Debt-to-income ratio', note: '' },
+    { key: 'down', label: 'Down payment', note: '' },
+    { key: 'employment', label: 'Employment stability', note: '' },
+    { key: 'history', label: 'Credit history', note: '' }
+  ];
+  list.innerHTML = items.map(function(item) {
+    var score = factors[item.key];
+    var barColor = score >= 75 ? '#1D9E75' : score >= 50 ? '#C9A227' : '#C0392B';
+    var label = score >= 75 ? 'Strong' : score >= 50 ? 'Fair' : 'Needs attention';
+    return '<div class="factor">' +
+      '<div class="factor-top">' +
+        '<span class="factor-name">' + item.label + '</span>' +
+        '<span class="factor-score" style="color:' + barColor + ';">' + label + '</span>' +
+      '</div>' +
+      '<div class="factor-bar"><div class="factor-fill" style="width:' + score + '%;background:' + barColor + ';"></div></div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderFeedback(f, dti, downPct, credit, employment, jobYears, collections, bankruptcy, firstTime, state, total) {
+  var items = [];
+
+  // Credit
+  if (credit >= 720) items.push({type:'good', text:'<strong>Great credit score.</strong> You\'ll qualify for the best rates and loan programs.'});
+  else if (credit >= 680) items.push({type:'warn', text:'<strong>Good credit</strong>, but improving to 720+ could save you thousands in interest over the life of your loan.'});
+  else items.push({type:'bad', text:'<strong>Credit score needs improvement.</strong> Focus on paying down balances and resolving any derogatory marks.'});
+
+  // DTI
+  if (dti < 36) items.push({type:'good', text:'<strong>Healthy debt-to-income ratio</strong> of ~' + Math.round(dti) + '%. Lenders look for under 43%.'});
+  else if (dti < 43) items.push({type:'warn', text:'<strong>DTI of ~' + Math.round(dti) + '%</strong> is acceptable but tight. Paying off debts before applying could strengthen your file.'});
+  else items.push({type:'bad', text:'<strong>DTI of ~' + Math.round(dti) + '%</strong> is above the standard 43% threshold. Reducing monthly debts is the highest-impact improvement you can make.'});
+
+  // Down payment
+  if (downPct >= 20) items.push({type:'good', text:'<strong>20%+ down payment</strong> eliminates PMI and shows strong financial reserves to lenders.'});
+  else if (downPct >= 5) items.push({type:'warn', text:'<strong>Down payment of ~' + Math.round(downPct) + '%</strong> works for FHA or conventional loans, but you\'ll likely pay PMI until you reach 20% equity.'});
+  else items.push({type:'bad', text:'<strong>Low down payment</strong> limits your loan options. Saving to at least 3.5% opens FHA; 5%+ opens conventional programs.'});
+
+  // Employment
+  if (employment === 'full-time-employed' && jobYears >= 2) items.push({type:'good', text:'<strong>Stable W-2 employment</strong> with 2+ years history is ideal for lenders.'});
+  else if (employment === 'self-employed') items.push({type:'warn', text:'<strong>Self-employed borrowers</strong> need 2 years of tax returns. Make sure your income is well-documented.'});
+  else if (jobYears < 1) items.push({type:'warn', text:'<strong>Less than 1 year</strong> at your current job may require a letter of explanation. 2+ years is the gold standard.'});
+
+  // First time buyer
+  if (firstTime === 'yes') items.push({type:'good', text:'<strong>First-time buyer programs</strong> are available in ' + (state||'your state') + ' — ask your lender about down payment assistance and state grants.'});
+
+  // Bankruptcy/collections
+  if (bankruptcy === 'recent') items.push({type:'bad', text:'<strong>Recent bankruptcy</strong> will significantly limit loan options. FHA requires a 2-year waiting period; conventional requires 4.'});
+  if (collections === 'major') items.push({type:'bad', text:'<strong>Outstanding collections</strong> need to be resolved before most lenders will approve your application.'});
+
+  var html = items.map(function(item) {
+    var icon = item.type === 'good' ? '✓' : item.type === 'warn' ? '⚠' : '✗';
+    return '<div class="feedback-item"><div class="feedback-icon ' + item.type + '">' + icon + '</div><div class="feedback-text">' + item.text + '</div></div>';
+  }).join('');
+
+  document.getElementById('feedback-list').innerHTML = html;
+}
+
+// ── Share functions ───────────────────────────────────────────────────────────
+function copyShareText() {
+  var score = document.getElementById('share-score-num').textContent;
+  var grade = document.getElementById('score-grade').textContent;
+  var text = 'I just got my Mortgage Readiness Score on HomeReady AI: ' + score + '/100 — ' + grade + '! 🏠\n\nGet your free score in under 2 minutes 👇\nhomereadyai.netlify.app/mortgage-readiness';
+  navigator.clipboard.writeText(text).then(function() { alert('Share text copied! ✅'); });
+}
+function shareTwitter() {
+  var score = document.getElementById('share-score-num').textContent;
+  var grade = document.getElementById('score-grade').textContent;
+  var text = encodeURIComponent('I scored ' + score + '/100 on my Mortgage Readiness Score — ' + grade + '! 🏠 Get yours free at homereadyai.netlify.app/mortgage-readiness via @HomeReadyAI');
+  window.open('https://twitter.com/intent/tweet?text=' + text, '_blank');
+}
+function copyLink() {
+  navigator.clipboard.writeText('https://homereadyai.netlify.app/mortgage-readiness').then(function() { alert('Link copied! ✅'); });
+}
+</script>
+</body>
+</html>
