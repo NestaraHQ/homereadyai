@@ -97,30 +97,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem
 .price-features{list-style:none;margin-bottom:1.5rem;}
 .price-features li{font-size:13px;color:var(--mid);padding:5px 0;display:flex;align-items:center;gap:8px;}
 .price-features li::before{content:'✓';color:var(--orange);font-weight:700;flex-shrink:0;}
-    # Generate a self-contained HTML snippet for HomeReady AI Testimonials Section
-# This Python script prints ready-to-use HTML code
-
-testimonials_html = '''
-<section id="testimonials" style="padding: 50px; background: #f4f4f4; text-align: center;">
-    <h2 style="color: #333;">Testimonials</h2>
-    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 300px;">
-            <p>&quot;HomeReady AI transformed my workflow!&quot;</p>
-            <cite>- Alice Johnson</cite>
-        </div>
-        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 300px;">
-            <p>&quot;Incredible accuracy and speed.&quot;</p>
-            <cite>- Bob Smith</cite>
-        </div>
-        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 300px;">
-            <p>&quot;Best AI tool I've used!&quot;</p>
-            <cite>- Carol Davis</cite>
-        </div>
-    </div>
-</section>
-'''
-print('Copy the following HTML into your index.html file:')
-print(testimonials_html)
 .price-btn{display:block;width:100%;padding:12px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;text-align:center;text-decoration:none;transition:all 0.2s;}
 .price-btn.primary{background:var(--orange);color:#fff;}
 .price-btn.primary:hover{background:var(--orange-dark);}
@@ -133,6 +109,17 @@ print(testimonials_html)
 .cta-btn:hover{transform:translateY(-2px);}
 footer{background:var(--dark);padding:1.5rem 2rem;text-align:center;font-size:12px;color:rgba(255,255,255,0.22);border-top:1px solid rgba(255,255,255,0.05);}
 footer a{color:rgba(255,255,255,0.38);text-decoration:none;}
+
+.testimonials{background:var(--dark);padding:5rem 1.5rem;}
+.testimonials-inner{max-width:1000px;margin:0 auto;}
+.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:3rem;}
+.testimonial-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:1.75rem;}
+.testimonial-stars{color:var(--orange);font-size:14px;margin-bottom:1rem;letter-spacing:2px;}
+.testimonial-text{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.8;font-weight:300;margin-bottom:1.25rem;font-style:italic;}
+.testimonial-author{display:flex;align-items:center;gap:10px;}
+.testimonial-avatar{width:38px;height:38px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;}
+.testimonial-name{font-size:13px;font-weight:600;color:#fff;}
+.testimonial-role{font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px;}
 @media(max-width:600px){.pricing-grid{grid-template-columns:1fr;}.demo-row{grid-template-columns:1fr;}.nav-cta{padding:8px 16px;font-size:12px;}}
 </style>
 </head>
@@ -260,6 +247,49 @@ footer a{color:rgba(255,255,255,0.38);text-decoration:none;}
         <div class="feature-icon gold">🏦</div>
         <div class="feature-title">Pre-approval letter generator</div>
         <p class="feature-desc">Generate a print-ready pre-approval letter in seconds with your company letterhead and NMLS number. Download as a professional PDF instantly — no formatting headaches.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <div class="section-label" style="color:rgba(255,255,255,0.4);">What people are saying</div>
+    <h2 class="section-title" style="color:#fff;">Real results from real users</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"As a first-time buyer I had no idea what half my contract said. HomeReady AI broke down every clause in plain English and flagged two things my agent missed. Worth every penny."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">MR</div>
+          <div>
+            <div class="testimonial-name">Maria R.</div>
+            <div class="testimonial-role">First-time home buyer · Austin, TX</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"I write 10–15 listings a week. This tool cut my time in half. The state-specific context is genuinely impressive — it knows Texas disclosure requirements cold."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">JT</div>
+          <div>
+            <div class="testimonial-name">James T.</div>
+            <div class="testimonial-role">Real estate agent · San Antonio, TX</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The pre-approval letter generator is a game changer. I used to spend 20 minutes formatting letters. Now it takes 30 seconds and looks more professional than what I was doing manually."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">CP</div>
+          <div>
+            <div class="testimonial-name">Carlos P.</div>
+            <div class="testimonial-role">Loan officer · Houston, TX</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -417,12 +447,13 @@ window.addEventListener('load', () => { demos.listing = true; setTimeout(() => r
 <div id="hr-popup-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;padding:1rem;" onclick="hrClosePopup(event)">
   <div style="background:#ffffff;border-radius:16px;padding:2rem 2rem 1.75rem;max-width:420px;width:100%;position:relative;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;" onclick="event.stopPropagation()">
     <button onclick="hrDismiss()" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#aaa;line-height:1;padding:4px;">×</button>
-    <div style="width:48px;height:48px;background:#EBF4FF;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:1rem;">🏠</div>
+    <div style="width:48px;height:48px;background:#FDF0E8;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:1rem;">🏠</div>
+    <div style="font-size:11px;font-weight:600;color:#E8793C;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">HomeReady AI by Vero</div>
     <h2 style="font-size:20px;font-weight:700;color:#111;margin:0 0 8px;line-height:1.3;">Get 3 free AI contract analyses</h2>
     <p style="font-size:14px;color:#555;margin:0 0 1.25rem;line-height:1.55;">Drop your email and we'll send you 3 free contract clause breakdowns — no credit card, no trial needed. Just answers.</p>
     <form id="hr-capture-form" onsubmit="hrSubmitForm(event)">
-      <input type="email" id="hr-email-input" placeholder="your@email.com" required style="width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:15px;margin-bottom:10px;box-sizing:border-box;outline:none;" />
-      <button type="submit" id="hr-submit-btn" style="width:100%;padding:12px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;">Send me the free analyses →</button>
+      <input type="email" id="hr-email-input" placeholder="your@email.com" required style="width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:15px;margin-bottom:10px;box-sizing:border-box;outline:none;transition:border-color .15s;" onfocus="this.style.borderColor='#E8793C'" onblur="this.style.borderColor='#ddd'"/>
+      <button type="submit" id="hr-submit-btn" style="width:100%;padding:12px;background:#E8793C;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:background .15s;" onmouseover="this.style.background='#C4622A'" onmouseout="this.style.background='#E8793C'">Send me the free analyses →</button>
     </form>
     <div id="hr-success" style="display:none;text-align:center;padding:1rem 0">
       <div style="font-size:36px;margin-bottom:8px">✅</div>
@@ -441,7 +472,8 @@ window.addEventListener('load', () => { demos.listing = true; setTimeout(() => r
   var overlay = document.getElementById('hr-popup-overlay');
   function hrShowPopup() {
     if (shown || sessionStorage.getItem('hr_popup_dismissed')) return;
-    shown = true; overlay.style.display = 'flex';
+    shown = true;
+    overlay.style.display = 'flex';
   }
   setTimeout(hrShowPopup, 30000);
   window.addEventListener('scroll', function() {
@@ -449,14 +481,19 @@ window.addEventListener('load', () => { demos.listing = true; setTimeout(() => r
     if (pct >= 60) hrShowPopup();
   }, { passive: true });
   window.hrClosePopup = function(e) { if (e.target === overlay) hrDismiss(); };
-  window.hrDismiss = function() { overlay.style.display = 'none'; sessionStorage.setItem('hr_popup_dismissed', '1'); };
+  window.hrDismiss = function() {
+    overlay.style.display = 'none';
+    sessionStorage.setItem('hr_popup_dismissed', '1');
+  };
   window.hrSubmitForm = function(e) {
     e.preventDefault();
     var email = document.getElementById('hr-email-input').value.trim();
     var btn = document.getElementById('hr-submit-btn');
-    btn.textContent = 'Sending...'; btn.disabled = true;
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
     fetch('https://app.convertkit.com/forms/' + KIT_FORM_ID + '/subscriptions', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email_address: email, api_key: KIT_ACCOUNT_ID })
     }).then(function() {
       document.getElementById('hr-capture-form').style.display = 'none';
