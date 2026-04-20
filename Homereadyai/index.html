@@ -97,6 +97,30 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem
 .price-features{list-style:none;margin-bottom:1.5rem;}
 .price-features li{font-size:13px;color:var(--mid);padding:5px 0;display:flex;align-items:center;gap:8px;}
 .price-features li::before{content:'✓';color:var(--orange);font-weight:700;flex-shrink:0;}
+    # Generate a self-contained HTML snippet for HomeReady AI Testimonials Section
+# This Python script prints ready-to-use HTML code
+
+testimonials_html = '''
+<section id="testimonials" style="padding: 50px; background: #f4f4f4; text-align: center;">
+    <h2 style="color: #333;">Testimonials</h2>
+    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 300px;">
+            <p>&quot;HomeReady AI transformed my workflow!&quot;</p>
+            <cite>- Alice Johnson</cite>
+        </div>
+        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 300px;">
+            <p>&quot;Incredible accuracy and speed.&quot;</p>
+            <cite>- Bob Smith</cite>
+        </div>
+        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 300px;">
+            <p>&quot;Best AI tool I've used!&quot;</p>
+            <cite>- Carol Davis</cite>
+        </div>
+    </div>
+</section>
+'''
+print('Copy the following HTML into your index.html file:')
+print(testimonials_html)
 .price-btn{display:block;width:100%;padding:12px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;text-align:center;text-decoration:none;transition:all 0.2s;}
 .price-btn.primary{background:var(--orange);color:#fff;}
 .price-btn.primary:hover{background:var(--orange-dark);}
