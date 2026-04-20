@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeReady AI — Offer Strength Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#E8793C;--orange-dark:#C4622A;--orange-light:#FDF0E8;--bg:#F7F4EF;--white:#FFFFFF;--dark:#1C1812;--mid:#6B5C4E;--muted:#A89888;--border:rgba(108,92,78,0.14);--green:#1D9E75;--green-light:#E6F8F0;--amber:#C9A227;--amber-light:#FFF8E7;--red:#C0392B;--red-light:#FDECEA;--blue:#185FA5;--blue-light:#E6F1FB;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+header{background:var(--dark);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-icon{width:32px;height:32px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:18px;height:18px;}
+.logo-name{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#fff;}
+.logo-by{font-size:11px;color:rgba(255,255,255,0.35);margin-left:3px;}
+.back-link{font-size:13px;color:rgba(255,255,255,0.45);text-decoration:none;transition:color 0.2s;}
+.back-link:hover{color:#fff;}
+.hero-strip{background:var(--orange);padding:1.25rem 2rem;text-align:center;}
+.hero-strip h1{font-family:'Fraunces',serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:600;color:#fff;margin-bottom:0.25rem;}
+.hero-strip p{font-size:13px;color:rgba(255,255,255,0.85);font-weight:300;}
+.wrap{max-width:720px;margin:0 auto;padding:1.5rem 1.25rem 4rem;}
+.card{background:var(--white);border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:1.25rem;}
+.card-head{padding:1.25rem 1.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.card-icon{width:38px;height:38px;background:var(--orange-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.card-title{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--dark);}
+.card-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.card-body{padding:1.25rem 1.5rem 1.5rem;}
+.section-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;}
+.divider{height:1px;background:var(--border);margin:16px 0;}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.row.full{grid-template-columns:1fr;}
+.row.three{grid-template-columns:1fr 1fr 1fr;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;}
+input,select{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);background:var(--bg);outline:none;transition:border-color 0.15s;}
+input:focus,select:focus{border-color:var(--orange);background:#fff;}
+.input-prefix{position:relative;}
+.input-prefix span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted);pointer-events:none;}
+.input-prefix input{padding-left:24px;}
+.btn{width:100%;padding:13px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn:hover{background:var(--orange-dark);}
+.btn:disabled{opacity:0.55;cursor:not-allowed;}
+.spin{width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:sp .65s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.results{display:none;}
+.results.show{display:block;}
+
+/* Market badge */
+.market-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:99px;font-size:12px;font-weight:600;margin-bottom:1.25rem;}
+.market-hot{background:#FDECEA;color:#C0392B;}
+.market-warm{background:var(--amber-light);color:#7A5800;}
+.market-neutral{background:var(--bg);color:var(--mid);border:1px solid var(--border);}
+.market-cool{background:var(--blue-light);color:var(--blue);}
+
+/* Score card */
+.score-card{background:var(--dark);border-radius:20px;padding:2rem;margin-bottom:1.25rem;text-align:center;position:relative;overflow:hidden;}
+.score-card::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(232,121,60,0.15),transparent 70%);pointer-events:none;}
+.score-ring-wrap{display:flex;justify-content:center;margin-bottom:1.25rem;}
+.score-ring{position:relative;width:160px;height:160px;}
+.score-ring svg{transform:rotate(-90deg);}
+.score-ring-bg{fill:none;stroke:rgba(255,255,255,0.08);stroke-width:12;}
+.score-ring-fill{fill:none;stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);}
+.score-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.score-num-val{font-family:'Fraunces',serif;font-size:48px;font-weight:700;color:#fff;line-height:1;}
+.score-num-max{font-size:13px;color:rgba(255,255,255,0.35);margin-top:2px;}
+.score-grade{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:4px;}
+.score-tagline{font-size:14px;color:rgba(255,255,255,0.55);font-weight:300;}
+.score-location{font-size:12px;color:rgba(255,255,255,0.35);margin-top:8px;}
+
+/* Factor bars */
+.factors{display:flex;flex-direction:column;gap:10px;margin-top:1.25rem;text-align:left;}
+.factor{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:12px 14px;}
+.factor-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.factor-name{font-size:13px;font-weight:500;color:#fff;}
+.factor-score{font-size:12px;font-weight:600;}
+.factor-weight{font-size:10px;color:rgba(255,255,255,0.3);margin-left:6px;}
+.factor-bar{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;}
+.factor-fill{height:100%;border-radius:2px;transition:width 0.8s ease;}
+
+/* AI feedback */
+.ai-feedback{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:1.25rem 1.5rem;margin-bottom:1.25rem;}
+.ai-label{font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;}
+.feedback-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.feedback-item:last-child{border-bottom:none;}
+.feedback-icon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:1px;}
+.feedback-icon.good{background:var(--green-light);color:var(--green);}
+.feedback-icon.warn{background:var(--amber-light);color:var(--amber);}
+.feedback-icon.bad{background:var(--red-light);color:var(--red);}
+.feedback-text{font-size:13px;color:var(--mid);line-height:1.6;}
+.feedback-text strong{color:var(--dark);}
+
+/* Share */
+.share-section{background:var(--dark);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;}
+.share-label{font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;}
+.share-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.share-btn{padding:10px;border:1px solid rgba(255,255,255,0.12);border-radius:9px;background:rgba(255,255,255,0.05);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.share-btn:hover{background:rgba(255,255,255,0.1);}
+.share-btn.orange{border-color:rgba(232,121,60,0.4);color:var(--orange);}
+
+/* Next steps */
+.next-steps{display:flex;flex-direction:column;gap:8px;}
+.next-step{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-decoration:none;transition:all 0.15s;}
+.next-step:hover{border-color:rgba(232,121,60,0.3);}
+.next-step-text{font-size:13px;font-weight:500;color:var(--dark);}
+.next-step-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.next-step-arrow{color:var(--orange);font-size:16px;flex-shrink:0;}
+
+footer{background:var(--dark);text-align:center;padding:1.25rem;font-size:11px;color:rgba(255,255,255,0.3);}
+footer a{color:var(--orange);text-decoration:none;}
+@media(max-width:580px){.row,.row.three{grid-template-columns:1fr;}.share-btns{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="/app">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <span class="logo-name">HomeReady AI</span>
+    <span class="logo-by">by Vero</span>
+  </a>
+  <a href="/app" class="back-link">← Back to tools</a>
+</header>
+
+<div class="hero-strip">
+  <h1>Offer Strength Analyzer</h1>
+  <p>See how competitive your offer is — scored by price, financing, contingencies & local market</p>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon">💪</div>
+      <div><div class="card-title">Your offer details</div><div class="card-sub">We'll score your offer and show you how to make it stronger</div></div>
+    </div>
+    <div class="card-body">
+
+      <div class="section-label">Property location</div>
+      <div class="row three" style="margin-bottom:12px;">
+        <div class="fg"><label>City</label><input type="text" id="o-city" placeholder="e.g. Austin" oninput="lookupMarket()"></div>
+        <div class="fg"><label>State</label>
+          <select id="o-state" onchange="lookupMarket()">
+            <option value="">— state —</option>
+            <option selected>Texas</option><option>California</option><option>Florida</option><option>New York</option><option>Illinois</option><option>Washington</option><option>Tennessee</option><option>Utah</option><option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Vermont</option><option>Virginia</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
+          </select>
+        </div>
+        <div class="fg"><label>Zip code</label><input type="text" id="o-zip" placeholder="e.g. 78704" maxlength="5" oninput="lookupMarket()"></div>
+      </div>
+
+      <div id="market-indicator" style="display:none;margin-bottom:16px;"></div>
+
+      <div class="divider"></div>
+      <div class="section-label">Your offer</div>
+      <div class="row">
+        <div class="fg">
+          <label>Asking price</label>
+          <div class="input-prefix"><span>$</span><input type="text" id="o-asking" placeholder="350,000" oninput="fmtNum(this)"></div>
+        </div>
+        <div class="fg">
+          <label>Your offer price</label>
+          <div class="input-prefix"><span>$</span><input type="text" id="o-offer" placeholder="355,000" oninput="fmtNum(this)"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="fg">
+          <label>Financing type</label>
+          <select id="o-financing">
+            <option value="cash">Cash — no financing</option>
+            <option value="conventional" selected>Conventional loan</option>
+            <option value="va">VA loan</option>
+            <option value="fha">FHA loan</option>
+            <option value="usda">USDA loan</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Down payment %</label>
+          <select id="o-down">
+            <option value="20">20% or more</option>
+            <option value="10" selected>10–19%</option>
+            <option value="5">5–9%</option>
+            <option value="3.5">3.5% (FHA min)</option>
+            <option value="3">3% (conventional min)</option>
+            <option value="0">0% (VA/USDA)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-label">Contingencies</div>
+      <div class="row three">
+        <div class="fg">
+          <label>Inspection</label>
+          <select id="o-inspection">
+            <option value="waived">Waived</option>
+            <option value="info-only">Information only</option>
+            <option value="standard" selected>Standard</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Financing</label>
+          <select id="o-finance-cont">
+            <option value="waived">Waived</option>
+            <option value="standard" selected>Standard</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Appraisal</label>
+          <select id="o-appraisal">
+            <option value="waived">Waived</option>
+            <option value="gap">Appraisal gap coverage</option>
+            <option value="standard" selected>Standard</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-label">Terms & extras</div>
+      <div class="row">
+        <div class="fg">
+          <label>Closing timeline</label>
+          <select id="o-closing">
+            <option value="fast">Fast close (14–21 days)</option>
+            <option value="standard" selected>Standard (30–45 days)</option>
+            <option value="flexible">Flexible — seller's choice</option>
+            <option value="slow">Extended (60+ days)</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Earnest money</label>
+          <select id="o-earnest">
+            <option value="high">3%+ of purchase price</option>
+            <option value="standard" selected>1–2% (standard)</option>
+            <option value="low">Less than 1%</option>
+          </select>
+        </div>
+      </div>
+      <div class="row three">
+        <div class="fg">
+          <label>Escalation clause?</label>
+          <select id="o-escalation">
+            <option value="yes">Yes — included</option>
+            <option value="no" selected>No</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Personal letter?</label>
+          <select id="o-letter">
+            <option value="yes">Yes — included</option>
+            <option value="no" selected>No</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Seller concessions?</label>
+          <select id="o-concessions">
+            <option value="none" selected>None requested</option>
+            <option value="closing">Closing costs</option>
+            <option value="repairs">Repairs</option>
+            <option value="both">Both</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn" id="analyze-btn" onclick="analyzeOffer()">Analyze my offer strength</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+
+    <div class="score-card">
+      <div id="market-context-badge"></div>
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <svg viewBox="0 0 160 160" width="160" height="160">
+            <circle class="score-ring-bg" cx="80" cy="80" r="68"/>
+            <circle class="score-ring-fill" id="score-ring-fill" cx="80" cy="80" r="68" stroke-dasharray="427" stroke-dashoffset="427"/>
+          </svg>
+          <div class="score-num">
+            <div class="score-num-val" id="score-display">0</div>
+            <div class="score-num-max">/100</div>
+          </div>
+        </div>
+      </div>
+      <div class="score-grade" id="score-grade"></div>
+      <div class="score-tagline" id="score-tagline"></div>
+      <div class="score-location" id="score-location"></div>
+      <div class="factors" id="factors-list"></div>
+    </div>
+
+    <div class="ai-feedback">
+      <div class="ai-label">🤖 How to strengthen your offer</div>
+      <div id="feedback-list"></div>
+    </div>
+
+    <div class="share-section">
+      <div class="share-label">📤 Share your offer score</div>
+      <div class="share-btns">
+        <button class="share-btn orange" onclick="copyShareText()">📋 Copy share text</button>
+        <button class="share-btn" onclick="shareTwitter()">𝕏 Share on X</button>
+        <button class="share-btn" onclick="copyLink()">🔗 Copy link</button>
+        <button class="share-btn" onclick="window.print()">🖨️ Print</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon">🗺️</div>
+        <div><div class="card-title">Next steps</div><div class="card-sub">Tools to help you close the deal</div></div>
+      </div>
+      <div class="card-body">
+        <div class="next-steps">
+          <a href="/comps" class="next-step">
+            <div><div class="next-step-text">🏘️ Check comparable sales</div><div class="next-step-sub">Make sure your offer price is justified by recent comps</div></div>
+            <div class="next-step-arrow">→</div>
+          </a>
+          <a href="/app" class="next-step">
+            <div><div class="next-step-text">✉️ Write your offer email</div><div class="next-step-sub">Draft a professional offer letter in seconds</div></div>
+            <div class="next-step-arrow">→</div>
+          </a>
+          <a href="/app" class="next-step">
+            <div><div class="next-step-text">📄 Review your contract</div><div class="next-step-sub">Understand every clause before you sign</div></div>
+            <div class="next-step-arrow">→</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>HomeReady AI · <a href="#">Vero</a> · Not legal or financial advice · <a href="mailto:admin@homereadyai.co">admin@homereadyai.co</a></footer>
+
+<script>
+// ── Market data by zip/city/state ─────────────────────────────────────────
+var MARKET_DATA = {
+  // Texas zips
+  '78704': {city:'Austin',state:'TX',temp:'very-hot',label:'🔥 Very Hot Market',modifier:-18,note:'South Austin — heavy competition, expect multiple offers'},
+  '78701': {city:'Austin',state:'TX',temp:'hot',label:'🔥 Hot Market',modifier:-12,note:'Downtown Austin — strong seller market'},
+  '78702': {city:'Austin',state:'TX',temp:'hot',label:'🔥 Hot Market',modifier:-12,note:'East Austin — rapidly appreciating'},
+  '78703': {city:'Austin',state:'TX',temp:'very-hot',label:'🔥 Very Hot Market',modifier:-18,note:'Tarrytown — premium neighborhood, low inventory'},
+  '78745': {city:'Austin',state:'TX',temp:'hot',label:'🔥 Hot Market',modifier:-10,note:'South Austin — competitive but accessible'},
+  '78750': {city:'Austin',state:'TX',temp:'warm',label:'🌡 Warm Market',modifier:-5,note:'North Austin — above-average competition'},
+  '78209': {city:'San Antonio',state:'TX',temp:'warm',label:'🌡 Warm Market',modifier:-6,note:'Alamo Heights — high demand, limited inventory'},
+  '78212': {city:'San Antonio',state:'TX',temp:'warm',label:'🌡 Warm Market',modifier:-5,note:'Monte Vista — historic, desirable area'},
+  '78201': {city:'San Antonio',state:'TX',temp:'neutral',label:'😐 Balanced Market',modifier:0,note:'West San Antonio — normal market conditions'},
+  '78240': {city:'San Antonio',state:'TX',temp:'neutral',label:'😐 Balanced Market',modifier:0,note:'Medical Center area — steady market'},
+  '77002': {city:'Houston',state:'TX',temp:'hot',label:'🔥 Hot Market',modifier:-10,note:'Downtown Houston — strong demand'},
+  '77005': {city:'Houston',state:'TX',temp:'warm',label:'🌡 Warm Market',modifier:-6,note:'West University — premium prices'},
+  '75201': {city:'Dallas',state:'TX',temp:'hot',label:'🔥 Hot Market',modifier:-10,note:'Downtown Dallas — competitive'},
+  '75205': {city:'Dallas',state:'TX',temp:'very-hot',label:'🔥 Very Hot Market',modifier:-15,note:'Highland Park — ultra-premium market'},
+  '78550': {city:'Harlingen',state:'TX',temp:'cool',label:'🧊 Buyer\'s Market',modifier:8,note:'Rio Grande Valley — more negotiating room'},
+  '78596': {city:'Weslaco',state:'TX',temp:'cool',label:'🧊 Buyer\'s Market',modifier:6,note:'Mid-Valley area — favorable for buyers'},
+  // California
+  '90210': {city:'Beverly Hills',state:'CA',temp:'very-hot',label:'🔥 Very Hot Market',modifier:-20,note:'Beverly Hills — extreme competition, all-cash common'},
+  '94102': {city:'San Francisco',state:'CA',temp:'very-hot',label:'🔥 Very Hot Market',modifier:-20,note:'SF — offers routinely 10-20% over asking'},
+  '90001': {city:'Los Angeles',state:'CA',temp:'hot',label:'🔥 Hot Market',modifier:-12,note:'LA — strong seller market'},
+  // Florida
+  '33101': {city:'Miami',state:'FL',temp:'hot',label:'🔥 Hot Market',modifier:-12,note:'Miami — high demand, international buyers'},
+  '32801': {city:'Orlando',state:'FL',temp:'warm',label:'🌡 Warm Market',modifier:-6,note:'Orlando — growing market'},
+  // Default state-level data
+  'TX': {temp:'warm',label:'🌡 Warm Market',modifier:-5,note:'Texas — generally competitive statewide'},
+  'CA': {temp:'very-hot',label:'🔥 Very Hot Market',modifier:-15,note:'California — highly competitive statewide'},
+  'FL': {temp:'hot',label:'🔥 Hot Market',modifier:-10,note:'Florida — strong seller market'},
+  'NY': {temp:'hot',label:'🔥 Hot Market',modifier:-10,note:'New York — competitive market'},
+  'TX_Austin': {temp:'very-hot',label:'🔥 Very Hot Market',modifier:-15,note:'Austin — one of the most competitive US markets'},
+  'TX_San Antonio': {temp:'warm',label:'🌡 Warm Market',modifier:-6,note:'San Antonio — above average competition'},
+  'TX_Houston': {temp:'warm',label:'🌡 Warm Market',modifier:-5,note:'Houston — moderate competition'},
+  'TX_Dallas': {temp:'hot',label:'🔥 Hot Market',modifier:-10,note:'Dallas-Fort Worth — strong seller market'},
+  'TX_Fort Worth': {temp:'warm',label:'🌡 Warm Market',modifier:-6,note:'Fort Worth — growing competitive market'},
+};
+
+var currentMarket = null;
+
+function lookupMarket() {
+  var zip = document.getElementById('o-zip').value.trim();
+  var city = document.getElementById('o-city').value.trim();
+  var state = document.getElementById('o-state').value;
+  var market = null;
+
+  if (zip.length === 5 && MARKET_DATA[zip]) {
+    market = MARKET_DATA[zip];
+  } else if (city && state) {
+    var cityKey = state + '_' + city;
+    if (MARKET_DATA[cityKey]) market = MARKET_DATA[cityKey];
+    else if (MARKET_DATA[state]) market = MARKET_DATA[state];
+  } else if (state && MARKET_DATA[state]) {
+    market = MARKET_DATA[state];
+  }
+
+  currentMarket = market;
+  var indicator = document.getElementById('market-indicator');
+  if (market) {
+    var colorMap = {'very-hot':'#FDECEA','hot':'#FFF3E0','warm':' var(--amber-light)','neutral':'var(--bg)','cool':'var(--blue-light)'};
+    var textMap = {'very-hot':'#C0392B','hot':'#C4622A','warm':'#7A5800','neutral':' var(--mid)','cool':'var(--blue)'};
+    indicator.style.display = 'block';
+    indicator.innerHTML = '<div style="background:' + (colorMap[market.temp]||'var(--bg)') + ';color:' + (textMap[market.temp]||'var(--mid)') + ';padding:8px 14px;border-radius:8px;font-size:13px;"><strong>' + market.label + '</strong> — ' + market.note + (market.modifier < 0 ? ' <span style="opacity:0.7">(score adjusted ' + market.modifier + ' pts)</span>' : market.modifier > 0 ? ' <span style="opacity:0.7">(score adjusted +' + market.modifier + ' pts)</span>' : '') + '</div>';
+  } else {
+    indicator.style.display = 'none';
+  }
+}
+
+function fmtNum(input) {
+  var raw = input.value.replace(/[^0-9]/g,'');
+  if (raw) input.value = parseInt(raw,10).toLocaleString();
+}
+
+function parseNum(id) {
+  var val = document.getElementById(id).value.replace(/[^0-9]/g,'');
+  return val ? parseInt(val,10) : 0;
+}
+
+// ── Scoring ───────────────────────────────────────────────────────────────
+function analyzeOffer() {
+  var btn = document.getElementById('analyze-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spin"></div> Analyzing...';
+
+  var asking = parseNum('o-asking');
+  var offer = parseNum('o-offer');
+  var financing = document.getElementById('o-financing').value;
+  var down = parseFloat(document.getElementById('o-down').value);
+  var inspection = document.getElementById('o-inspection').value;
+  var financeCont = document.getElementById('o-finance-cont').value;
+  var appraisal = document.getElementById('o-appraisal').value;
+  var closing = document.getElementById('o-closing').value;
+  var earnest = document.getElementById('o-earnest').value;
+  var escalation = document.getElementById('o-escalation').value;
+  var letter = document.getElementById('o-letter').value;
+  var concessions = document.getElementById('o-concessions').value;
+  var city = document.getElementById('o-city').value || 'your area';
+  var state = document.getElementById('o-state').value || '';
+  var zip = document.getElementById('o-zip').value || '';
+
+  var factors = {};
+
+  // 1. Price vs asking (25%)
+  if (asking > 0 && offer > 0) {
+    var pct = ((offer - asking) / asking) * 100;
+    if (pct >= 5) factors.price = 100;
+    else if (pct >= 2) factors.price = 90;
+    else if (pct >= 0) factors.price = 78;
+    else if (pct >= -2) factors.price = 60;
+    else if (pct >= -5) factors.price = 40;
+    else factors.price = 15;
+  } else { factors.price = 75; }
+
+  // 2. Financing (20%)
+  var finMap = {cash:100,conventional:78,va:68,fha:52,usda:48};
+  factors.financing = finMap[financing] || 78;
+
+  // 3. Contingencies (20%)
+  var contScore = 100;
+  if (inspection === 'standard') contScore -= 20;
+  else if (inspection === 'info-only') contScore -= 8;
+  if (financeCont === 'standard') contScore -= 18;
+  if (appraisal === 'standard') contScore -= 15;
+  else if (appraisal === 'gap') contScore -= 5;
+  factors.contingencies = Math.max(10, contScore);
+
+  // 4. Down payment (20%)
+  var downMap = {20:100,10:78,5:58,3.5:40,3:35,0:90};
+  factors.down = downMap[down] !== undefined ? downMap[down] : 78;
+  if (financing === 'va' || financing === 'usda') factors.down = 85;
+
+  // 5. Terms & extras (15%)
+  var termsScore = 60;
+  if (closing === 'fast') termsScore += 20;
+  else if (closing === 'flexible') termsScore += 15;
+  else if (closing === 'slow') termsScore -= 15;
+  if (earnest === 'high') termsScore += 12;
+  else if (earnest === 'low') termsScore -= 10;
+  if (escalation === 'yes') termsScore += 10;
+  if (letter === 'yes') termsScore += 5;
+  if (concessions === 'closing') termsScore -= 10;
+  else if (concessions === 'repairs') termsScore -= 12;
+  else if (concessions === 'both') termsScore -= 20;
+  factors.terms = Math.min(100, Math.max(10, termsScore));
+
+  // Weighted base score
+  var baseScore = Math.round(
+    factors.price * 0.25 +
+    factors.financing * 0.20 +
+    factors.contingencies * 0.20 +
+    factors.down * 0.20 +
+    factors.terms * 0.15
+  );
+
+  // Apply market modifier
+  var marketMod = currentMarket ? currentMarket.modifier : 0;
+  var finalScore = Math.min(100, Math.max(1, baseScore + marketMod));
+
+  // Grade
+  var grade, tagline, gradeColor;
+  if (finalScore >= 85) { grade = 'Very Strong'; tagline = "Excellent offer — you're likely to stand out in most markets."; gradeColor = '#1D9E75'; }
+  else if (finalScore >= 70) { grade = 'Strong'; tagline = "Solid offer — competitive in most situations."; gradeColor = '#2E8B57'; }
+  else if (finalScore >= 55) { grade = 'Moderate'; tagline = "Decent offer — a few improvements could make it much stronger."; gradeColor = '#C9A227'; }
+  else if (finalScore >= 40) { grade = 'Weak'; tagline = "This offer may struggle to compete — see tips below."; gradeColor = '#E8793C'; }
+  else { grade = 'Very Weak'; tagline = "Significant changes needed to be competitive in this market."; gradeColor = '#C0392B'; }
+
+  document.getElementById('results').classList.add('show');
+
+  setTimeout(function() {
+    animateScore(finalScore, gradeColor);
+    renderFactors(factors, marketMod);
+    renderFeedback(factors, asking, offer, financing, down, inspection, financeCont, appraisal, closing, earnest, escalation, concessions, city, state, zip, finalScore, marketMod);
+    document.getElementById('score-grade').textContent = grade;
+    document.getElementById('score-grade').style.color = gradeColor;
+    document.getElementById('score-tagline').textContent = tagline;
+    var locStr = zip ? zip + ' · ' : '';
+    locStr += city ? city + (state ? ', ' + state : '') : (state || '');
+    if (currentMarket) locStr += ' · ' + currentMarket.label;
+    document.getElementById('score-location').textContent = locStr;
+  }, 300);
+
+  btn.disabled = false;
+  btn.innerHTML = 'Re-analyze offer';
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function animateScore(target, color) {
+  var fill = document.getElementById('score-ring-fill');
+  var display = document.getElementById('score-display');
+  fill.style.stroke = color;
+  fill.style.strokeDashoffset = 427 - (target / 100) * 427;
+  var current = 0;
+  var iv = setInterval(function() {
+    current = Math.min(current + Math.ceil(target / 60), target);
+    display.textContent = current;
+    if (current >= target) clearInterval(iv);
+  }, 20);
+}
+
+function renderFactors(factors, marketMod) {
+  var items = [
+    {key:'price', label:'Price vs. asking', weight:'25%'},
+    {key:'financing', label:'Financing type', weight:'20%'},
+    {key:'contingencies', label:'Contingencies', weight:'20%'},
+    {key:'down', label:'Down payment', weight:'20%'},
+    {key:'terms', label:'Terms & extras', weight:'15%'},
+  ];
+  var html = items.map(function(item) {
+    var score = factors[item.key];
+    var barColor = score >= 75 ? '#1D9E75' : score >= 50 ? '#C9A227' : '#C0392B';
+    var scoreLabel = score >= 75 ? 'Strong' : score >= 50 ? 'Fair' : 'Weak';
+    return '<div class="factor">' +
+      '<div class="factor-top">' +
+        '<span class="factor-name">' + item.label + '<span class="factor-weight">' + item.weight + '</span></span>' +
+        '<span class="factor-score" style="color:' + barColor + ';">' + scoreLabel + '</span>' +
+      '</div>' +
+      '<div class="factor-bar"><div class="factor-fill" style="width:' + score + '%;background:' + barColor + ';"></div></div>' +
+    '</div>';
+  }).join('');
+  if (marketMod !== 0) {
+    var modColor = marketMod < 0 ? '#C0392B' : '#1D9E75';
+    html += '<div class="factor" style="border-color:rgba(255,255,255,0.15)">' +
+      '<div class="factor-top"><span class="factor-name">Local market adjustment</span>' +
+      '<span class="factor-score" style="color:' + modColor + ';">' + (marketMod > 0 ? '+' : '') + marketMod + ' pts</span></div>' +
+      '<div style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:4px;">' + (currentMarket ? currentMarket.note : '') + '</div>' +
+    '</div>';
+  }
+  document.getElementById('factors-list').innerHTML = html;
+}
+
+function renderFeedback(factors, asking, offer, financing, down, inspection, financeCont, appraisal, closing, earnest, escalation, concessions, city, state, zip, score, marketMod) {
+  var items = [];
+  var pricePct = asking > 0 ? ((offer - asking) / asking * 100) : 0;
+
+  if (pricePct >= 3) items.push({type:'good', text:'<strong>Offer price is competitive</strong> at ' + pricePct.toFixed(1) + '% over asking — this gives you a strong edge.'});
+  else if (pricePct >= 0) items.push({type:'warn', text:'<strong>Offer is at asking price.</strong> In competitive markets consider going 1–3% over to stand out.'});
+  else items.push({type:'bad', text:'<strong>Offer is ' + Math.abs(pricePct).toFixed(1) + '% under asking.</strong> This may hurt in competitive markets — consider increasing if you really want this home.'});
+
+  if (financing === 'cash') items.push({type:'good', text:'<strong>Cash offer</strong> is the strongest signal to sellers — no financing risk, fastest close.'});
+  else if (financing === 'conventional') items.push({type:'good', text:'<strong>Conventional financing</strong> is well-regarded by sellers — lower risk than FHA/USDA.'});
+  else if (financing === 'va') items.push({type:'warn', text:'<strong>VA loan</strong> is excellent for you, but some sellers have misconceptions. Include a pre-approval letter and educate the listing agent on VA loan benefits.'});
+  else items.push({type:'warn', text:'<strong>FHA/USDA financing</strong> can be less competitive due to stricter appraisal requirements. A strong pre-approval letter helps reassure sellers.'});
+
+  if (inspection === 'waived') items.push({type:'good', text:'<strong>Waived inspection</strong> is a major competitive advantage — but understand you\'re accepting the property as-is.'});
+  else if (inspection === 'info-only') items.push({type:'good', text:'<strong>Information-only inspection</strong> is a good compromise — you get peace of mind without the ability to back out.'});
+
+  if (appraisal === 'waived') items.push({type:'good', text:'<strong>Waived appraisal contingency</strong> is very attractive to sellers — shows confidence in the price.'});
+  else if (appraisal === 'gap') items.push({type:'good', text:'<strong>Appraisal gap coverage</strong> shows willingness to cover a low appraisal — stronger than standard.'});
+
+  if (escalation === 'no' && score < 70) items.push({type:'warn', text:'<strong>Consider an escalation clause</strong> — automatically increases your offer up to a cap if competing offers come in. Very effective in multiple-offer situations.'});
+  if (letter === 'no' && score < 75) items.push({type:'warn', text:'<strong>A personal letter</strong> can make a difference — tell the sellers why you love their home. Note: some states restrict this for fair housing reasons.'});
+  if (concessions === 'closing' || concessions === 'both') items.push({type:'bad', text:'<strong>Requesting seller concessions</strong> weakens your offer. If you need closing cost help, consider negotiating after inspection instead.'});
+  if (closing === 'fast') items.push({type:'good', text:'<strong>Fast close timeline</strong> is a strong signal to sellers — less time for things to go wrong.'});
+  if (marketMod <= -12) items.push({type:'warn', text:'<strong>' + (city || state) + ' is a very competitive market.</strong> In this zip code, expect multiple offers and be prepared to act quickly. Your strongest offer should go in first — not after negotiating.'});
+
+  document.getElementById('feedback-list').innerHTML = items.map(function(item) {
+    var icon = item.type === 'good' ? '✓' : item.type === 'warn' ? '!' : '✗';
+    return '<div class="feedback-item"><div class="feedback-icon ' + item.type + '">' + icon + '</div><div class="feedback-text">' + item.text + '</div></div>';
+  }).join('');
+}
+
+function copyShareText() {
+  var score = document.getElementById('score-display').textContent;
+  var grade = document.getElementById('score-grade').textContent;
+  var text = 'I just analyzed my offer on HomeReady AI — scored ' + score + '/100 (' + grade + ')! 🏠\n\nSee how strong your offer is: homereadyai.co/offer-strength';
+  navigator.clipboard.writeText(text).then(function(){ alert('Copied! ✅'); });
+}
+function shareTwitter() {
+  var score = document.getElementById('score-display').textContent;
+  var grade = document.getElementById('score-grade').textContent;
+  window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent('My offer scored ' + score + '/100 — ' + grade + ' 🏠 Check your offer strength at homereadyai.co/offer-strength via @HomeReadyAI'), '_blank');
+}
+function copyLink() {
+  navigator.clipboard.writeText('https://homereadyai.co/offer-strength').then(function(){ alert('Link copied! ✅'); });
+}
+</script>
+</body>
+</html>
