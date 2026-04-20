@@ -316,7 +316,7 @@ footer a{color:var(--orange);text-decoration:none;}
         <button class="share-btn copy-btn-share" onclick="copyShareText()">📋 Copy share text</button>
         <button class="share-btn" onclick="shareTwitter()">𝕏 Share on X</button>
         <button class="share-btn" onclick="copyLink()">🔗 Copy link</button>
-        <button class="share-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+        <button class="share-btn" onclick="downloadScorePDF()">🖨️ Save as PDF</button>
       </div>
     </div>
 
@@ -567,6 +567,120 @@ function shareTwitter() {
 }
 function copyLink() {
   navigator.clipboard.writeText('https://homereadyai.netlify.app/mortgage-readiness').then(function() { alert('Link copied! ✅'); });
+
+function downloadScorePDF() {
+  var score = document.getElementById('share-score-num').textContent;
+  var grade = document.getElementById('score-grade').textContent;
+  var gradeColor = document.getElementById('score-grade').style.color || '#E8793C';
+  var tagline = document.getElementById('score-tagline').textContent;
+
+  // Gather factor data
+  var factorEls = document.querySelectorAll('.factor');
+  var factorHTML = '';
+  factorEls.forEach(function(f) {
+    var name = f.querySelector('.factor-name').textContent;
+    var scoreLabel = f.querySelector('.factor-score').textContent;
+    var scoreColor = f.querySelector('.factor-score').style.color;
+    var fillWidth = f.querySelector('.factor-fill').style.width;
+    factorHTML += '<div style="margin-bottom:10px;">' +
+      '<div style="display:flex;justify-content:space-between;margin-bottom:4px;">' +
+        '<span style="font-size:12px;font-weight:500;color:#1C1812;">' + name + '</span>' +
+        '<span style="font-size:11px;font-weight:700;color:' + scoreColor + ';">' + scoreLabel + '</span>' +
+      '</div>' +
+      '<div style="height:5px;background:#EDE8E0;border-radius:3px;overflow:hidden;">' +
+        '<div style="height:100%;width:' + fillWidth + ';background:' + scoreColor + ';border-radius:3px;"></div>' +
+      '</div>' +
+    '</div>';
+  });
+
+  // Gather feedback
+  var feedbackItems = document.querySelectorAll('.feedback-item');
+  var feedbackHTML = '';
+  feedbackItems.forEach(function(item) {
+    var icon = item.querySelector('.feedback-icon');
+    var text = item.querySelector('.feedback-text').innerHTML;
+    var isGood = icon.classList.contains('good');
+    var isWarn = icon.classList.contains('warn');
+    var bgColor = isGood ? '#E6F8F0' : isWarn ? '#FFF8E7' : '#FDECEA';
+    var dotColor = isGood ? '#1D9E75' : isWarn ? '#C9A227' : '#C0392B';
+    feedbackHTML += '<div style="display:flex;gap:8px;padding:7px 10px;background:' + bgColor + ';border-radius:7px;margin-bottom:6px;">' +
+      '<div style="width:8px;height:8px;border-radius:50%;background:' + dotColor + ';margin-top:4px;flex-shrink:0;"></div>' +
+      '<div style="font-size:11px;color:#4a3c30;line-height:1.55;">' + text + '</div>' +
+    '</div>';
+  });
+
+  var today = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+  var pw = window.open('','_blank');
+
+  pw.document.write('<!DOCTYPE html><html><head><title>Mortgage Readiness Score</title>');
+  pw.document.write('<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet">');
+  pw.document.write('<style>');
+  pw.document.write('*{margin:0;padding:0;box-sizing:border-box;}');
+  pw.document.write('body{font-family:"DM Sans",sans-serif;background:#fff;color:#1C1812;font-size:12px;}');
+  pw.document.write('.page{max-width:680px;margin:0 auto;padding:0;min-height:100vh;}');
+  pw.document.write('.top-bar{height:6px;background:linear-gradient(90deg,#1C1812,#E8793C,#1C1812);}');
+  pw.document.write('.header{padding:20px 32px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #EDE8E0;}');
+  pw.document.write('.brand{display:flex;align-items:center;gap:8px;}');
+  pw.document.write('.brand-icon{width:28px;height:28px;background:#E8793C;border-radius:6px;display:flex;align-items:center;justify-content:center;}');
+  pw.document.write('.brand-name{font-family:"Fraunces",serif;font-size:15px;font-weight:700;color:#1C1812;}');
+  pw.document.write('.header-date{font-size:11px;color:#A89888;}');
+  pw.document.write('.hero{background:linear-gradient(135deg,#1C1812 0%,#2E2416 100%);padding:24px 32px;display:flex;align-items:center;gap:24px;}');
+  pw.document.write('.score-circle{width:90px;height:90px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;border:4px solid rgba(255,255,255,0.15);}');
+  pw.document.write('.score-big{font-family:"Fraunces",serif;font-size:38px;font-weight:700;color:#fff;line-height:1;}');
+  pw.document.write('.score-max{font-size:11px;color:rgba(255,255,255,0.4);}');
+  pw.document.write('.hero-text h1{font-family:"Fraunces",serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:4px;}');
+  pw.document.write('.hero-text .grade{font-size:14px;font-weight:600;margin-bottom:4px;}');
+  pw.document.write('.hero-text .tagline{font-size:12px;color:rgba(255,255,255,0.5);font-weight:300;line-height:1.5;}');
+  pw.document.write('.body{padding:20px 32px;}');
+  pw.document.write('.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}');
+  pw.document.write('.section-title{font-size:10px;font-weight:600;color:#A89888;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;}');
+  pw.document.write('.factors-box{background:#F7F4EF;border-radius:10px;padding:14px;}');
+  pw.document.write('.feedback-box{background:#F7F4EF;border-radius:10px;padding:14px;}');
+  pw.document.write('.footer{padding:12px 32px;border-top:1px solid #EDE8E0;display:flex;justify-content:space-between;align-items:center;}');
+  pw.document.write('.footer-left{font-size:10px;color:#A89888;}');
+  pw.document.write('.footer-right{font-size:10px;color:#E8793C;font-weight:600;}');
+  pw.document.write('.bottom-bar{height:4px;background:linear-gradient(90deg,#1C1812,#E8793C,#1C1812);}');
+  pw.document.write('@media print{body{margin:0;}.page{max-width:100%;}}');
+  pw.document.write('</style></head><body>');
+
+  pw.document.write('<div class="page">');
+  pw.document.write('<div class="top-bar"></div>');
+  pw.document.write('<div class="header">');
+  pw.document.write('<div class="brand"><div class="brand-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="brand-name">HomeReady AI</span></div>');
+  pw.document.write('<span class="header-date">Mortgage Readiness Report · ' + today + '</span>');
+  pw.document.write('</div>');
+
+  pw.document.write('<div class="hero">');
+  pw.document.write('<div class="score-circle" style="background:' + gradeColor + '33;border-color:' + gradeColor + '55;">');
+  pw.document.write('<div class="score-big">' + score + '</div>');
+  pw.document.write('<div class="score-max">/100</div>');
+  pw.document.write('</div>');
+  pw.document.write('<div class="hero-text">');
+  pw.document.write('<h1>Mortgage Readiness Score</h1>');
+  pw.document.write('<div class="grade" style="color:' + gradeColor + ';">' + grade + '</div>');
+  pw.document.write('<div class="tagline">' + tagline + '</div>');
+  pw.document.write('</div></div>');
+
+  pw.document.write('<div class="body">');
+  pw.document.write('<div class="two-col">');
+  pw.document.write('<div><div class="section-title">Score breakdown</div><div class="factors-box">' + factorHTML + '</div></div>');
+  pw.document.write('<div><div class="section-title">Personalized feedback</div><div class="feedback-box">' + feedbackHTML + '</div></div>');
+  pw.document.write('</div>');
+
+  // CTA strip
+  pw.document.write('<div style="background:#E8793C;border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;">');
+  pw.document.write('<div style="color:#fff;"><div style="font-family:Fraunces,serif;font-size:13px;font-weight:700;">Ready to take the next step?</div><div style="font-size:11px;color:rgba(255,255,255,0.8);margin-top:2px;">Find comparable homes, analyze contracts, and more.</div></div>');
+  pw.document.write('<div style="font-size:11px;font-weight:700;color:#fff;background:rgba(255,255,255,0.2);padding:6px 12px;border-radius:99px;">homereadyai.netlify.app</div>');
+  pw.document.write('</div>');
+
+  pw.document.write('</div>');
+  pw.document.write('<div class="footer"><span class="footer-left">Not financial advice · Always consult a licensed mortgage professional</span><span class="footer-right">homereadyai.netlify.app</span></div>');
+  pw.document.write('<div class="bottom-bar"></div>');
+  pw.document.write('</div>');
+  pw.document.write('<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>');
+  pw.document.write('</body></html>');
+  pw.document.close();
+}
 }
 </script>
 </body>
